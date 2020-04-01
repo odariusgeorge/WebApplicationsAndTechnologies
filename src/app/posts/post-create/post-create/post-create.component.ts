@@ -16,6 +16,7 @@ export class PostCreateComponent {
       return;
     }
     const post: Post = {
+      id: 'dsadsadas',
       title: form.value.enteredTitle,
       content: form.value.enteredContent
       };
