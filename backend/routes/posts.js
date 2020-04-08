@@ -38,12 +38,17 @@ router.get("",(req, res, next) => {
   postQuery
   .then( documents => {
     fetchedPosts = documents;
-    return Post.count();
+    return Post.countDocuments();
   }).then( count => {
     res.status(200).json({
       message: "Posts fetched successfully!",
       posts: fetchedPosts,
       maxPosts: count
+    });
+  })
+  .catch(error => {
+    res.status(500).json({
+      message: "Fetching posts failed!"
     });
   });
 });
@@ -56,7 +61,12 @@ router.get("/:id", (req, res, next) => {
       res.status(404).json({message: 'Post not found!'});
     }
   })
-})
+  .catch(error => {
+    res.status(500).json({
+      message: "Fetching post failed!"
+    });
+});
+});
 
 router.post("",
 checkAuth
@@ -78,6 +88,11 @@ checkAuth
       imagePath: createdPost.imagePath
     }
     });
+  })
+  .catch(error => {
+    res.status(500).json({
+      message: "Creating a post failed!"
+    })
   });
 });
 
@@ -103,9 +118,8 @@ multer({storage: storage}).single("image"),(req, res, next) => {
     } else {
       res.status(401).json({message: 'Not authorized!'});
     }
-
+  })
   });
-});
 
 router.delete("/:id",
 checkAuth,
