@@ -8,7 +8,7 @@ const userRoutes = require('./routes/user');
 
 const app = express();
 
-mongoose.connect("mongodb+srv://george:sqsH7Ud4ghXRFCTm@cluster0-lerqw.mongodb.net/node-angular?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://george:"+ process.env.MONGO_ATLAS_PW + "@cluster0-lerqw.mongodb.net/node-angular?retryWrites=true&w=majority")
 .then(() => {
   console.log('Connected to databse');
 }).catch(() => {
