@@ -4,4 +4,7 @@ export interface Post {
   content: string;
   imagePath: string;
   creator: string;
+  university: string;
+  course: string;
+  author: string;
 }

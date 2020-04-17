@@ -30,7 +30,10 @@ export class PostsService {
             content: post.content,
             id: post._id,
             imagePath: post.imagePath,
-            creator: post.creator
+            creator: post.creator,
+            course: post.course,
+            university: post.university,
+            author: post.author
           };
         }), maxPosts: postData.maxPosts};
       }))
@@ -46,14 +49,18 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string}>(BACKEND_URL+ "/" + id);
+    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string}>(BACKEND_URL+ "/" + id);
   }
 
-  addPost(title: string, content: string, image: File) {
+  addPost(title: string, content: string, image: File, course: string, university: string, author: string) {
     const postData = new FormData();
     postData.append("title", title);
     postData.append("content", content);
     postData.append("image", image, title);
+    postData.append("course", course);
+    postData.append("university", university);
+    postData.append("author", author);
+
     this.http
     .post<{message: string, post: Post}>(BACKEND_URL,
     postData)
@@ -62,7 +69,7 @@ export class PostsService {
     });
   }
 
-  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string) {
+  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string, courseUpdated: string, universityUpdated: string, authorUpdated: string) {
     let postData: Post | FormData;
     if (typeof(imageUpdated) === 'object') {
       postData = new FormData();
@@ -70,13 +77,20 @@ export class PostsService {
       postData.append("title", titleUpdated);
       postData.append("content", contentUpdated);
       postData.append("image", imageUpdated, titleUpdated);
+      postData.append("course", courseUpdated);
+      postData.append("university", universityUpdated);
+      postData.append("author", authorUpdated);
     } else {
         postData =  {
         id: id,
         title: titleUpdated,
         content: contentUpdated,
         imagePath: imageUpdated,
-        creator: null
+        creator: null,
+        course: courseUpdated,
+        university: universityUpdated,
+        author: authorUpdated
+
       }
     }
     this.http.put(BACKEND_URL + "/" + id, postData)

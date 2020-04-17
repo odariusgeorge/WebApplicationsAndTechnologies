@@ -9,6 +9,9 @@ import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   {
+    path: '', redirectTo: 'postList', pathMatch: 'full'
+  },
+  {
     path: 'postList', component: PostListComponent
   },
   {

@@ -24,7 +24,10 @@ export class PostCreateComponent implements OnInit {
   ngOnInit() {
     this.form = new FormGroup({
       title: new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
+      author: new FormControl(null, {validators: [Validators.required]}),
       content: new FormControl(null, {validators: [Validators.required]}),
+      course: new FormControl(null, {validators: [Validators.required]}),
+      university: new FormControl(null, {validators: [Validators.required]}),
       image: new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]})
     });
 
@@ -40,12 +43,18 @@ export class PostCreateComponent implements OnInit {
             title: postData.title,
             content: postData.content,
             imagePath: postData.imagePath,
-            creator: postData.creator
+            creator: postData.creator,
+            course: postData.course,
+            university: postData.university,
+            author: postData.author
           };
           this.form.setValue({
             title: this.post.title,
             content: this.post.content,
-            image: this.post.imagePath
+            image: this.post.imagePath,
+            course: this.post.course,
+            university: this.post.university,
+            author: this.post.author
           });
         });
       } else {
@@ -75,13 +84,20 @@ export class PostCreateComponent implements OnInit {
       this.postsService.addPost(
         this.form.value.title,
         this.form.value.content,
-        this.form.value.image);
+        this.form.value.image,
+        this.form.value.course,
+        this.form.value.university,
+        this.form.value.author
+      );
     } else {
       this.postsService.updatePost(
         this.postId,
         this.form.value.title,
         this.form.value.content,
-        this.form.value.image
+        this.form.value.image,
+        this.form.value.course,
+        this.form.value.university,
+        this.form.value.author,
         );
     }
     this.form.reset();

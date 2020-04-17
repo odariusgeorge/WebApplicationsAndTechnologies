@@ -9,6 +9,33 @@
         >
         <mat-error *ngIf="form.get('title').invalid">Put a title!</mat-error>
       </mat-form-field>
+      <br>
+      <mat-form-field>
+        <input
+        matInput type = "text"
+        formControlName="author"
+        placeholder= "Post Author"
+        >
+        <mat-error *ngIf="form.get('author').invalid">Put an author!</mat-error>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <input
+        matInput type = "text"
+        formControlName="course"
+        placeholder= "Post Course"
+        >
+        <mat-error *ngIf="form.get('course').invalid">Put a course!</mat-error>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <input
+        matInput type = "text"
+        formControlName="university"
+        placeholder= "Post University"
+        >
+        <mat-error *ngIf="form.get('university').invalid">Put a course!</mat-error>
+      </mat-form-field>
       <div>
         <button mat-stroked-button type="button" (click)="filePicker.click()">Pick image!</button>
         <input type="file" #filePicker (change)="onImagePicked($event)">

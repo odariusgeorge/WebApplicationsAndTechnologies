@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
-  title = "My Web App"
+  title = "Books List"
 
   ngOnInit() {
     this.userIsAuthenticated = this.authService.getIsAuth();

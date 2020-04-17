@@ -2,8 +2,11 @@
 <mat-accordion multi="true" *ngIf = "posts.length>0 && !isLoading">
   <mat-expansion-panel *ngFor="let post of posts">
     <mat-expansion-panel-header>
-      {{post.title}}
+      Title: {{post.title}}
     </mat-expansion-panel-header>
+    <p> Author: {{post.author}} </p>
+    <p> University: {{post.university}} </p>
+    <p> Course: {{post.course}} </p>
     <div class = "post-image">
       <img [src]="post.imagePath"  [alt]="post.title">
     </div>

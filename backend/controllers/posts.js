@@ -34,7 +34,10 @@ exports.createPost =  (req, res, next) => {
     title: req.body.title,
     content: req.body.content,
     imagePath: url + "/images/" + req.file.filename,
-    creator: req.userData.userId
+    creator: req.userData.userId,
+    course: req.body.course,
+    university: req.body.university,
+    author: req.body.author
   });
   post.save().then(createdPost => {
     res.status(201).json({
@@ -43,7 +46,10 @@ exports.createPost =  (req, res, next) => {
       id: createdPost._id,
       title: createdPost.title,
       content: createdPost.content,
-      imagePath: createdPost.imagePath
+      imagePath: createdPost.imagePath,
+      course: createdPost.course,
+      university: createdPost.university,
+      author: createdPost.author
     }
     });
   })
@@ -65,7 +71,10 @@ exports.updatePost = (req, res, next) => {
     title: req.body.title,
     content: req.body.content,
     imagePath: imagePath,
-    creator: req.userData.userId
+    creator: req.userData.userId,
+    course: req.body.course,
+    university: req.body.university,
+    author: req.body.author
   })
 
   Post.updateOne({_id: req.params.id, creator: req.userData.userId },post).then( result => {
