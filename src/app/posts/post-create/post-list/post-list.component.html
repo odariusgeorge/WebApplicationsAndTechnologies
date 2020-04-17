@@ -1,8 +1,12 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 <mat-accordion multi="true" *ngIf = "posts.length>0 && !isLoading">
-  <mat-expansion-panel *ngFor="let post of posts">
+  <input type="text" [(ngModel)]="searchTitle" placeholder="Search Title" />
+  <input type="text" [(ngModel)]="searchAuthor" placeholder="Search Author" />
+  <input type="text" [(ngModel)]="searchUniversity" placeholder="Search University" />
+  <input type="text" [(ngModel)]="searchCourse" placeholder="Search Course" />
+  <mat-expansion-panel *ngFor="let post of posts | filter: searchAuthor : 'author' | filter: searchTitle : 'title' | filter: searchCourse: 'course' | filter: searchUniversity : 'university' ">
     <mat-expansion-panel-header>
-      Title: {{post.title}}
+      Title: {{post.title}}, Author: {{post.author}}, Deadline: {{ today| date:'hh:mm:ss'}}
     </mat-expansion-panel-header>
     <p> Author: {{post.author}} </p>
     <p> University: {{post.university}} </p>

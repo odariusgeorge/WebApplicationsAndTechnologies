@@ -3,7 +3,10 @@ import { Post } from '../post.model'
 import { PostsService } from '../post.service';
 import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
-import { AuthService } from '../../../auth/auth.service'
+import { AuthService } from '../../../auth/auth.service';
+import { formatDate } from '@angular/common';
+
+
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
@@ -15,16 +18,23 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   isLoading = false;
   totalPosts = 0;
-  postsPerPage = 2;
+  postsPerPage = 10;
   currentPage = 1;
   pageSizeOption = [1, 2, 5, 10];
   userIsAuthenticated = false;
-  userId: string
+  userId: string;
   private postsSub: Subscription;
   private authStatusSub: Subscription;
+  searchTitle: string;
+  searchAuthor: string;
+  searchUniversity: string;
+  searchCourse: string;
+  today = Date.now();
 
 
-  constructor(public postsService: PostsService, private authService: AuthService) {}
+  constructor(public postsService: PostsService, private authService: AuthService) {
+    setInterval(() => {this.today = Date.now()}, 1);
+  }
 
 
   ngOnInit() {
@@ -65,5 +75,4 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.postsPerPage = pageData.pageSize;
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
   }
-
 }
