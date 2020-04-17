@@ -64,7 +64,7 @@ export class AuthService {
           const now = new Date();
           const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
           this.saveAuthData(token, expirationDate, this.userId);
-          this.router.navigate(["/"]);
+          this.router.navigate(["/postList"], {skipLocationChange: true});
         }
       }, _ => {
         this.authStatusListener.next(false);}
@@ -74,6 +74,7 @@ export class AuthService {
   autoAuthUser() {
     const authInformation = this.getAuthData();
     if (!authInformation) {
+      this.router.navigate(['/postList'], {skipLocationChange: true});
       return;
     }
     const now = new Date();
@@ -83,6 +84,7 @@ export class AuthService {
       this.isAuthenticated = true;
       this.userId = authInformation.userId;
       this.setAuthTimer(expiresIn / 1000);
+      this.router.navigate(['/postList'], {skipLocationChange: true});
       this.authStatusListener.next(true);
     }
   }
@@ -94,7 +96,7 @@ export class AuthService {
     this.userId = null;
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
-    this.router.navigate(["/login"]);
+    this.router.navigate(["/login"], {skipLocationChange: true});
   }
 
   private setAuthTimer(duration: number) {

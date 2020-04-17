@@ -1,9 +1,9 @@
 <mat-toolbar color="primary">
-  <span><a *ngIf="userIsAuthenticated" routerLink="/">My MEAN Web Application</a></span>
+  <span><a *ngIf="userIsAuthenticated" routerLink="/postList">{{title}}</a></span>
   <span class="spacer"></span>
     <ul>
       <li *ngIf="userIsAuthenticated">
-        <a mat-button routerLink="/create" routerLinkActive="mat-accent">New post</a>
+        <a mat-button routerLink="/createPost" routerLinkActive="mat-accent">New post</a>
       </li>
       <li *ngIf="!userIsAuthenticated">
         <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>

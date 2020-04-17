@@ -9,10 +9,10 @@ import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   {
-    path: '', component: PostListComponent, canActivate: [AuthGuard]
+    path: 'postList', component: PostListComponent
   },
   {
-    path: 'create', component: PostCreateComponent, canActivate: [AuthGuard]
+    path: 'createPost', component: PostCreateComponent, canActivate: [AuthGuard]
   },
   {
     path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard]

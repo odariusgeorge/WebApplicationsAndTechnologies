@@ -58,7 +58,7 @@ export class PostsService {
     .post<{message: string, post: Post}>(BACKEND_URL,
     postData)
     .subscribe( (responseData) => {
-      this.router.navigate(["/"]);
+      this.router.navigate(["/postList"], {skipLocationChange: true});
     });
   }
 
@@ -81,7 +81,7 @@ export class PostsService {
     }
     this.http.put(BACKEND_URL + "/" + id, postData)
     .subscribe(response => {
-      this.router.navigate(["/"]);
+      this.router.navigate(["/postList"], {skipLocationChange: true});
     })
   }
 
