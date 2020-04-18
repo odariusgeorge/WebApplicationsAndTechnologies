@@ -7,12 +7,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { JsonFilterByPipe } from '../../helpers/json-filter-by.pipe'
 import { FilterPipe } from '../../helpers/filter.pipe';
+import { PostMessagesComponent } from './post-messages/post-messages.component';
 
 
 @NgModule({
   declarations: [
     PostListComponent,
     PostCreateComponent,
+    PostMessagesComponent,
     JsonFilterByPipe,
     FilterPipe
   ],

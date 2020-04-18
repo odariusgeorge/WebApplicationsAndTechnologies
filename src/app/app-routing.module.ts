@@ -4,8 +4,11 @@ import { PostListComponent } from './posts/post-create/post-list/post-list.compo
 import { PostCreateComponent } from './posts/post-create/post-create/post-create.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-import { AuthGuard } from './auth/auth.guard';
+import { PostMessagesComponent } from './posts/post-create/post-messages/post-messages.component';
 import { CreateModeratorComponent } from './auth/createModerator/createModerator.component';
+import { AuthGuard } from './auth/auth.guard';
+import { AdminGuard } from './auth/admin.guard';
+
 
 
 const routes: Routes = [
@@ -19,7 +22,7 @@ const routes: Routes = [
     path: 'createPost', component: PostCreateComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard]
+    path: 'edit/:postId', component: PostCreateComponent, canActivate: [AdminGuard]
   },
   {
     path: 'login', component: LoginComponent
@@ -28,14 +31,17 @@ const routes: Routes = [
     path: 'signup', component: SignupComponent
   },
   {
-    path: 'createModerator', component: CreateModeratorComponent
+    path: 'createModerator', component: CreateModeratorComponent, canActivate: [AdminGuard]
+  },
+  {
+    path: 'message/:postId', component: PostMessagesComponent, canActivate: [AuthGuard]
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AuthGuard]
+  providers: [AuthGuard, AdminGuard]
 })
 
 export class AppRoutingModule { }

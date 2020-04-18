@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-content>
+    Title: {{post.title}} <br>
+    Author: {{post.author}} <br>
+    Course: {{post.course}} <br>
+    University: {{post.university}} <br>
+    Content: {{post.content}} <br>
+    <img height="100" width="100" src={{post.imagePath}}>
+  </mat-card-content>
+    <mat-accordion multi="true">
+      <br> <br>
+      <h1 align="center"> Messages </h1>
+      <mat-expansion-panel *ngFor="let mes of messages">
+        <mat-expansion-panel-header *ngIf=" mes === 'Hello!'" >
+          {{mes}}
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </mat-accordion>
+</mat-card>
+
+
+

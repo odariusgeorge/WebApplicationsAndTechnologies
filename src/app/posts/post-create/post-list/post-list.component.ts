@@ -77,4 +77,8 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.postsPerPage = pageData.pageSize;
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
   }
+
+  onBid() {
+    console.log(1);
+  }
 }

@@ -6,20 +6,22 @@
   <input type="text" [(ngModel)]="searchCourse" placeholder="Search Course" />
   <mat-expansion-panel *ngFor="let post of posts | filter: searchAuthor : 'author' | filter: searchTitle : 'title' | filter: searchCourse: 'course' | filter: searchUniversity : 'university' ">
     <mat-expansion-panel-header>
-      Title: {{post.title}}, Author: {{post.author}}, Deadline: {{ today| date:'hh:mm:ss'}}
+      Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ today| date:'hh:mm:ss'}}, Seller: {{post.creator}}
     </mat-expansion-panel-header>
     <p> Author: {{post.author}} </p>
     <p> University: {{post.university}} </p>
     <p> Course: {{post.course}} </p>
+    <p> Content: {{post.content}} </p>
     <div class = "post-image">
       <img [src]="post.imagePath"  [alt]="post.title">
     </div>
-    <p>
-      {{post.content}}
-    </p>
     <mat-action-row *ngIf="userIsAdmin">
       <a mat-button color = "primary" [routerLink]="['/edit', post.id]"> EDIT </a>
       <button mat-button color = "warn" (click) = "onDelete(post.id)"> DELETE </button>
+    </mat-action-row>
+    <mat-action-row *ngIf="userIsAuthenticated && !userIsAdmin">
+      <a mat-button color = "primary" (click) = "onBid()"> BID </a>
+      <a mat-button color = "primary" [routerLink]="['/message', post.id]"> MESSAGE SELLER </a>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
