@@ -5,6 +5,7 @@ import { PostCreateComponent } from './posts/post-create/post-create/post-create
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthGuard } from './auth/auth.guard';
+import { CreateModeratorComponent } from './auth/createModerator/createModerator.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,9 @@ const routes: Routes = [
   },
   {
     path: 'signup', component: SignupComponent
+  },
+  {
+    path: 'createModerator', component: CreateModeratorComponent
   }
 ];
 

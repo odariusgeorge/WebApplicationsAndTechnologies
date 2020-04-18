@@ -9,7 +9,30 @@ exports.createUser =  (req, res, next) => {
   const user = new User({
     email: req.body.email,
     password: hash,
-    admin: false
+    admin: req.body.admin
+  });
+  user.save()
+  .then(result => {
+    res.status(201).json({
+      message: 'User created!',
+      result: result
+    });
+  })
+  .catch(err => {
+    res.status(500).json({
+        message: "Invalid authentication credentials!"
+    });
+  });
+})
+}
+
+exports.createModerator =  (req, res, next) => {
+  bcrypt.hash(req.body.password, 10)
+  .then(hash => {
+  const user = new User({
+    email: req.body.email,
+    password: hash,
+    admin: req.body.admin
   });
   user.save()
   .then(result => {
