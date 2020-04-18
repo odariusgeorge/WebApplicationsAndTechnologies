@@ -8,7 +8,8 @@ exports.createUser =  (req, res, next) => {
   .then(hash => {
   const user = new User({
     email: req.body.email,
-    password: hash
+    password: hash,
+    admin: false
   });
   user.save()
   .then(result => {
@@ -42,7 +43,8 @@ exports.userLogin =  (req, res, next) => {
     res.status(200).json({
       token: token,
       expiresIn: 3600,
-      userId: fetchedUser._id
+      userId: fetchedUser._id,
+      admin: fetchedUser.admin
     });
   })
   .catch(err => {

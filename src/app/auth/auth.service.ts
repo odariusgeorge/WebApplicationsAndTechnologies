@@ -17,6 +17,7 @@ export class AuthService {
   private tokenTimer: any;
   private authStatusListener = new Subject<boolean>();
   private userId: string;
+  private isAdmin: boolean;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -32,8 +33,12 @@ export class AuthService {
     return this.authStatusListener.asObservable();
   }
 
+  getIsAdmin() {
+    return this.isAdmin;
+  }
+
   createUser(email: string, password: string) {
-    const authData: AuthData = { email: email, password: password };
+    const authData: AuthData = { email: email, password: password, admin: false };
     this.http
       .post( BACKEND_URL + "/signup", authData)
       .subscribe(response => {
@@ -46,9 +51,9 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    const authData: AuthData = { email: email, password: password };
+    const authData: AuthData = { email: email, password: password, admin: false };
     this.http
-      .post<{ token: string; expiresIn: number, userId: string }>(
+      .post<{ token: string; expiresIn: number, userId: string, admin: boolean}>(
         BACKEND_URL + "/login",
         authData
       )
@@ -60,10 +65,11 @@ export class AuthService {
           this.setAuthTimer(expiresInDuration);
           this.isAuthenticated = true;
           this.userId = response.userId;
+          this.isAdmin = response.admin;
           this.authStatusListener.next(true);
           const now = new Date();
           const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
-          this.saveAuthData(token, expirationDate, this.userId);
+          this.saveAuthData(token, expirationDate, this.userId, this.isAdmin);
           this.router.navigate(["/postList"], {skipLocationChange: true});
         }
       }, _ => {
@@ -83,6 +89,7 @@ export class AuthService {
       this.token = authInformation.token;
       this.isAuthenticated = true;
       this.userId = authInformation.userId;
+      this.isAdmin = JSON.parse(authInformation.isAdmin);
       this.setAuthTimer(expiresIn / 1000);
       this.router.navigate(['/postList'], {skipLocationChange: true});
       this.authStatusListener.next(true);
@@ -92,6 +99,7 @@ export class AuthService {
   logout() {
     this.token = null;
     this.isAuthenticated = false;
+    this.isAdmin = false;
     this.authStatusListener.next(false);
     this.userId = null;
     clearTimeout(this.tokenTimer);
@@ -106,29 +114,34 @@ export class AuthService {
     }, duration * 1000);
   }
 
-  private saveAuthData(token: string, expirationDate: Date, userId: string) {
+  private saveAuthData(token: string, expirationDate: Date, userId: string, isAdmin: boolean) {
     localStorage.setItem("token", token);
     localStorage.setItem("expiration", expirationDate.toISOString());
     localStorage.setItem("userId", userId);
+    localStorage.setItem("isAdmin", String(isAdmin));
+
   }
 
   private clearAuthData() {
     localStorage.removeItem("token");
     localStorage.removeItem("expiration");
     localStorage.removeItem("userId");
+    localStorage.removeItem("isAdmin");
   }
 
   private getAuthData() {
     const token = localStorage.getItem("token");
     const expirationDate = localStorage.getItem("expiration");
     const userId = localStorage.getItem("userId");
+    const isAdmin = localStorage.getItem("isAdmin");
     if (!token || !expirationDate) {
       return;
     }
     return {
       token: token,
       expirationDate: new Date(expirationDate),
-      userId: userId
+      userId: userId,
+      isAdmin: isAdmin
     }
   }
 

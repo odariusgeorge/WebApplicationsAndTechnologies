@@ -2,6 +2,9 @@
   <span><a routerLink="/postList">{{title}}</a></span>
   <span class="spacer"></span>
     <ul>
+      <li *ngIf="userIsAdmin">
+        <a mat-button routerLink="/createPost" routerLinkActive="mat-accent">Add Moderator</a>
+      </li>
       <li *ngIf="userIsAuthenticated">
         <a mat-button routerLink="/createPost" routerLinkActive="mat-accent">New post</a>
       </li>
