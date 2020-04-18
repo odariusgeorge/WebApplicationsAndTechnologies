@@ -1,5 +1,6 @@
 <mat-card>
-  <mat-card-content>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <mat-card-content *ngIf="!isLoading">
     Title: {{post.title}} <br>
     Author: {{post.author}} <br>
     Course: {{post.course}} <br>
