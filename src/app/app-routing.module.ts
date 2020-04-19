@@ -5,6 +5,7 @@ import { PostCreateComponent } from './posts/post-create/post-create/post-create
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { PostMessagesComponent } from './posts/post-create/post-messages/post-messages.component';
+import { PostBidComponent } from './posts/post-create/post-bid/post-bid.component';
 import { CreateModeratorComponent } from './auth/createModerator/createModerator.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AdminGuard } from './auth/admin.guard';
@@ -35,6 +36,9 @@ const routes: Routes = [
   },
   {
     path: 'message/:postId', component: PostMessagesComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'bid/:postId', component: PostBidComponent, canActivate: [AuthGuard]
   }
 ];
 

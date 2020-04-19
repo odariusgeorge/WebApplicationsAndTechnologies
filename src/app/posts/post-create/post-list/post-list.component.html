@@ -20,7 +20,7 @@
       <button mat-button color = "warn" (click) = "onDelete(post.id)"> DELETE </button>
     </mat-action-row>
     <mat-action-row *ngIf="userIsAuthenticated && !userIsAdmin">
-      <a mat-button color = "primary" (click) = "onBid()"> BID </a>
+      <a mat-button color = "primary" [routerLink]="['/bid', post.id]"> BID </a>
       <a mat-button color = "primary" [routerLink]="['/message', post.id]"> MESSAGE SELLER </a>
     </mat-action-row>
   </mat-expansion-panel>

@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <mat-card-content *ngIf="!isLoading">
+    Title: {{post.title}} <br>
+    Author: {{post.author}} <br>
+    Course: {{post.course}} <br>
+    University: {{post.university}} <br>
+    Content: {{post.content}} <br>
+    <img height="100" width="100" src={{post.imagePath}}>
+  </mat-card-content>
+      <br> <br>
+      <h1 align="center">Bid </h1>
+      <input type ="number" [(ngModel)] = "finalAmount">
+      <div id="paypal-checkout-btn"></div>
+</mat-card>
+
+
+

@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { JsonFilterByPipe } from '../../helpers/json-filter-by.pipe'
 import { FilterPipe } from '../../helpers/filter.pipe';
 import { PostMessagesComponent } from './post-messages/post-messages.component';
+import { PostBidComponent } from './post-bid/post-bid.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { PostMessagesComponent } from './post-messages/post-messages.component';
     PostListComponent,
     PostCreateComponent,
     PostMessagesComponent,
+    PostBidComponent,
     JsonFilterByPipe,
     FilterPipe
   ],

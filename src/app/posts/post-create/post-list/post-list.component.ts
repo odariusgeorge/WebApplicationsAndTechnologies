@@ -6,6 +6,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from '../../../auth/auth.service';
 import { formatDate } from '@angular/common';
 
+declare let paypal: any;
 
 @Component({
   selector: 'app-post-list',
@@ -78,7 +79,7 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
   }
 
-  onBid() {
-    console.log(1);
+  onBid(amount: number) {
+    console.log(amount);
   }
 }
