@@ -49,7 +49,7 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string}>(BACKEND_URL+ "/" + id);
+    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string, messages: Array<string>}>(BACKEND_URL+ "/" + id);
   }
 
   addPost(title: string, content: string, image: File, course: string, university: string, author: string) {
@@ -69,7 +69,7 @@ export class PostsService {
     });
   }
 
-  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string, courseUpdated: string, universityUpdated: string, authorUpdated: string) {
+  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>) {
     let postData: Post | FormData;
     if (typeof(imageUpdated) === 'object') {
       postData = new FormData();
@@ -80,6 +80,7 @@ export class PostsService {
       postData.append("course", courseUpdated);
       postData.append("university", universityUpdated);
       postData.append("author", authorUpdated);
+      postData.append("messages", JSON.stringify(messages));
     } else {
         postData =  {
         id: id,
@@ -89,8 +90,8 @@ export class PostsService {
         creator: null,
         course: courseUpdated,
         university: universityUpdated,
-        author: authorUpdated
-
+        author: authorUpdated,
+        messages: messages
       }
     }
     this.http.put(BACKEND_URL + "/" + id, postData)
@@ -98,6 +99,25 @@ export class PostsService {
       this.router.navigate(["/postList"], {skipLocationChange: true});
     })
   }
+
+  updatePostMessage(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>) {
+    let postData: Post = {
+        id: id,
+        title: titleUpdated,
+        content: contentUpdated,
+        imagePath: imageUpdated,
+        creator: null,
+        course: courseUpdated,
+        university: universityUpdated,
+        author: authorUpdated,
+        messages: messages
+      }
+    this.http.put(BACKEND_URL + "/" + id, postData)
+    .subscribe(response => {
+      console.log(response);
+    })
+  }
+
 
   deletePost(postId: string) {
     return this.http.delete(BACKEND_URL + "/" + postId)

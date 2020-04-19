@@ -37,7 +37,8 @@ exports.createPost =  (req, res, next) => {
     creator: req.userData.userId,
     course: req.body.course,
     university: req.body.university,
-    author: req.body.author
+    author: req.body.author,
+    messages: req.body.messages
   });
   post.save().then(createdPost => {
     res.status(201).json({
@@ -49,7 +50,8 @@ exports.createPost =  (req, res, next) => {
       imagePath: createdPost.imagePath,
       course: createdPost.course,
       university: createdPost.university,
-      author: createdPost.author
+      author: createdPost.author,
+      messages: createdPost.messages
     }
     });
   })
@@ -74,11 +76,17 @@ exports.updatePost = (req, res, next) => {
     creator: req.userData.userId,
     course: req.body.course,
     university: req.body.university,
-    author: req.body.author
+    author: req.body.author,
+    messages: req.body.messages
   })
 
-  Post.updateOne({_id: req.params.id, creator: req.userData.userId },post).then( result => {
-      res.status(200).json({message: 'Update successful!'});
+  Post.updateOne({_id: req.params.id},post).then( result => {
+      if(result.n > 0) {
+        res.status(200).json({message: 'Update successful!'});
+      } else {
+        res.status(401).json({message:"Wrong"});
+      }
+
   });
   };
 

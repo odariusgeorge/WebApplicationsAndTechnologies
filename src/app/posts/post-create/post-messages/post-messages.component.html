@@ -8,14 +8,29 @@
     Content: {{post.content}} <br>
     <img height="100" width="100" src={{post.imagePath}}>
   </mat-card-content>
-    <mat-accordion multi="true">
+    <mat-accordion multi="true" *ngIf="!isLoading">
       <br> <br>
       <h1 align="center"> Messages </h1>
-      <mat-expansion-panel *ngFor="let mes of messages">
-        <mat-expansion-panel-header *ngIf=" mes === 'Hello!'" >
+      <mat-expansion-panel *ngFor="let mes of post.messages">
+        <mat-expansion-panel-header>
           {{mes}}
         </mat-expansion-panel-header>
       </mat-expansion-panel>
+    <br>
+    <form [formGroup]="form" (submit) = "onPostMessage()">
+      <mat-form-field>
+        <input
+        matInput type = "text"
+        formControlName = "message"
+        placeholder= "Leave a Message">
+      </mat-form-field>
+      <br>
+      <button
+        mat-raised-button
+        color = "primary"
+        type="submit"> Post Message</button>
+    </form>
+
     </mat-accordion>
 </mat-card>
 

@@ -7,4 +7,5 @@ export interface Post {
   university: string;
   course: string;
   author: string;
+  messages: Array<string>;
 }

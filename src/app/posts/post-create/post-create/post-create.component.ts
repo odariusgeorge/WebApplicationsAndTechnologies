@@ -46,7 +46,8 @@ export class PostCreateComponent implements OnInit {
             creator: postData.creator,
             course: postData.course,
             university: postData.university,
-            author: postData.author
+            author: postData.author,
+            messages: postData.messages
           };
           this.form.setValue({
             title: this.post.title,
@@ -98,6 +99,7 @@ export class PostCreateComponent implements OnInit {
         this.form.value.course,
         this.form.value.university,
         this.form.value.author,
+        this.post.messages
         );
     }
     this.form.reset();

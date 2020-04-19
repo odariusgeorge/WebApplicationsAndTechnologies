@@ -7,7 +7,8 @@ const postSchema = mongoose.Schema({
   creator: {type: mongoose.Schema.Types.ObjectId, ref: "User" ,required: true},
   course: {type: String, required: true},
   university: {type: String, required: true},
-  author: {type: String, required: true}
+  author: {type: String, required: true},
+  messages: [{type: String}]
 });
 
 module.exports = mongoose.model('Post', postSchema);
