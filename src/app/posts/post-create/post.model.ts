@@ -8,4 +8,7 @@ export interface Post {
   course: string;
   author: string;
   messages: Array<string>;
+  startingPrice: number;
+  minimumAllowedPrice: number;
+  winner: string;
 }

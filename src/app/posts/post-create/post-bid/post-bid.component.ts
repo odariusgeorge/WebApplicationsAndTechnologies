@@ -3,7 +3,7 @@ import { Post } from '../post.model';
 import { PostsService } from '../post.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Validators } from '@angular/forms';
+import { AuthService } from 'src/app/auth/auth.service';
 
 declare let paypal: any;
 
@@ -13,7 +13,7 @@ declare let paypal: any;
 })
 export class PostBidComponent implements OnInit, AfterViewChecked {
 
-  constructor(public postsService: PostsService, public route: ActivatedRoute) {}
+  constructor(public postsService: PostsService, public authService: AuthService, public route: ActivatedRoute) {}
   private postId: string;
   public post: Post;
   public isLoading = false;
@@ -40,6 +40,9 @@ export class PostBidComponent implements OnInit, AfterViewChecked {
       return actions.payment.execute().then((payment) => {
         console.log(payment);
       });
+  },
+  onClick: () => {
+    this.onPostBid();
   }
 }
 
@@ -65,9 +68,6 @@ addPaypalScript() {
   ngOnInit() {
     this.paypalLoad = true;
     this.addScript = false;
-    this.form = new FormGroup({
-      message: new FormControl(null, {validators: [Validators.required]})
-    });
     this.route.paramMap.subscribe( (paramMap: ParamMap) => {
       if(paramMap.has('postId')) {
         this.postId = paramMap.get('postId');
@@ -83,19 +83,22 @@ addPaypalScript() {
             course: postData.course,
             university: postData.university,
             author: postData.author,
-            messages: postData.messages
+            messages: postData.messages,
+            startingPrice: postData.startingPrice,
+            minimumAllowedPrice: postData.minimumAllowedPrice,
+            winner: ""
           };
+          this.finalAmount = postData.startingPrice
         });
       }
     });
   }
 
-  onPostMessage() {
-    if(this.form.invalid) {
-      return;
-    }
-    this.post.messages.push(this.form.value.message);
-    this.postsService.updatePostMessage(
+  onPostBid() {
+    console.log("smth");
+    this.post.winner = this.authService.getUserId();
+    this.post.startingPrice = this.finalAmount;
+    this.postsService.updateBid(
       this.post.id,
       this.post.title,
       this.post.content,
@@ -103,8 +106,10 @@ addPaypalScript() {
       this.post.course,
       this.post.university,
       this.post.author,
-      this.post.messages
+      this.post.messages,
+      this.post.startingPrice,
+      this.post.minimumAllowedPrice,
+      this.post.winner
     );
-    this.form.reset();
   }
 }

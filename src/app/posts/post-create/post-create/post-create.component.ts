@@ -28,7 +28,9 @@ export class PostCreateComponent implements OnInit {
       content: new FormControl(null, {validators: [Validators.required]}),
       course: new FormControl(null, {validators: [Validators.required]}),
       university: new FormControl(null, {validators: [Validators.required]}),
-      image: new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]})
+      image: new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]}),
+      startingPrice: new FormControl(null, {validators: [Validators.required]}),
+      minimumAllowedPrice: new FormControl(null, {validators: [Validators.required]})
     });
 
     this.route.paramMap.subscribe( (paramMap: ParamMap) => {
@@ -47,7 +49,10 @@ export class PostCreateComponent implements OnInit {
             course: postData.course,
             university: postData.university,
             author: postData.author,
-            messages: postData.messages
+            messages: postData.messages,
+            startingPrice: postData.startingPrice,
+            minimumAllowedPrice: postData.minimumAllowedPrice,
+            winner: postData.winner
           };
           this.form.setValue({
             title: this.post.title,
@@ -55,7 +60,9 @@ export class PostCreateComponent implements OnInit {
             image: this.post.imagePath,
             course: this.post.course,
             university: this.post.university,
-            author: this.post.author
+            author: this.post.author,
+            startingPrice: this.post.startingPrice,
+            minimumAllowedPrice: this.post.minimumAllowedPrice
           });
         });
       } else {
@@ -88,7 +95,9 @@ export class PostCreateComponent implements OnInit {
         this.form.value.image,
         this.form.value.course,
         this.form.value.university,
-        this.form.value.author
+        this.form.value.author,
+        this.form.value.startingPrice,
+        this.form.value.minimumAllowedPrice
       );
     } else {
       this.postsService.updatePost(
@@ -99,7 +108,10 @@ export class PostCreateComponent implements OnInit {
         this.form.value.course,
         this.form.value.university,
         this.form.value.author,
-        this.post.messages
+        this.post.messages,
+        this.post.startingPrice,
+        this.post.minimumAllowedPrice,
+        this.post.winner
         );
     }
     this.form.reset();

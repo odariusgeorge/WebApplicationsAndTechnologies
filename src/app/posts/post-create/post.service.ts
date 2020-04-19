@@ -33,7 +33,9 @@ export class PostsService {
             creator: post.creator,
             course: post.course,
             university: post.university,
-            author: post.author
+            author: post.author,
+            startingPrice: post.startingPrice,
+            minimumAllowedPrice: post.minimumAllowedPrice
           };
         }), maxPosts: postData.maxPosts};
       }))
@@ -49,10 +51,10 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string, messages: Array<string>}>(BACKEND_URL+ "/" + id);
+    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string, messages: Array<string>, startingPrice: number, minimumAllowedPrice: number, winner: string }>(BACKEND_URL+ "/" + id);
   }
 
-  addPost(title: string, content: string, image: File, course: string, university: string, author: string) {
+  addPost(title: string, content: string, image: File, course: string, university: string, author: string, startingPrice: number, minimumAllowedPrice: number) {
     const postData = new FormData();
     postData.append("title", title);
     postData.append("content", content);
@@ -60,6 +62,9 @@ export class PostsService {
     postData.append("course", course);
     postData.append("university", university);
     postData.append("author", author);
+    postData.append("startingPrice", JSON.stringify(startingPrice));
+    postData.append("minimumAllowedPrice", JSON.stringify(minimumAllowedPrice));
+    postData.append("winner", null);
 
     this.http
     .post<{message: string, post: Post}>(BACKEND_URL,
@@ -69,7 +74,7 @@ export class PostsService {
     });
   }
 
-  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>) {
+  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>, startingPrice: number, minimumAllowedPrice: number, winner: string) {
     let postData: Post | FormData;
     if (typeof(imageUpdated) === 'object') {
       postData = new FormData();
@@ -81,6 +86,9 @@ export class PostsService {
       postData.append("university", universityUpdated);
       postData.append("author", authorUpdated);
       postData.append("messages", JSON.stringify(messages));
+      postData.append("startingPrice", JSON.stringify(startingPrice));
+      postData.append("minimumAllowedPrice", JSON.stringify(minimumAllowedPrice));
+      postData.append("winner", winner);
     } else {
         postData =  {
         id: id,
@@ -91,7 +99,10 @@ export class PostsService {
         course: courseUpdated,
         university: universityUpdated,
         author: authorUpdated,
-        messages: messages
+        messages: messages,
+        startingPrice: startingPrice,
+        minimumAllowedPrice: minimumAllowedPrice,
+        winner: winner
       }
     }
     this.http.put(BACKEND_URL + "/" + id, postData)
@@ -100,7 +111,7 @@ export class PostsService {
     })
   }
 
-  updatePostMessage(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>) {
+  updatePostMessage(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>, startingPrice: number, minimumAllowedPrice: number, winner: string) {
     let postData: Post = {
         id: id,
         title: titleUpdated,
@@ -110,7 +121,32 @@ export class PostsService {
         course: courseUpdated,
         university: universityUpdated,
         author: authorUpdated,
-        messages: messages
+        messages: messages,
+        startingPrice: startingPrice,
+        minimumAllowedPrice: minimumAllowedPrice,
+        winner: winner
+      }
+    this.http.put(BACKEND_URL + "/" + id, postData)
+    .subscribe(response => {
+      console.log(response);
+    })
+  }
+
+  updateBid(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>, startingPrice: number, minimumAllowedPrice: number, winner: string) {
+    console.log(winner);
+    let postData: Post = {
+        id: id,
+        title: titleUpdated,
+        content: contentUpdated,
+        imagePath: imageUpdated,
+        creator: null,
+        course: courseUpdated,
+        university: universityUpdated,
+        author: authorUpdated,
+        messages: messages,
+        startingPrice: startingPrice,
+        minimumAllowedPrice: minimumAllowedPrice,
+        winner: winner
       }
     this.http.put(BACKEND_URL + "/" + id, postData)
     .subscribe(response => {

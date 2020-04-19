@@ -22,3 +22,9 @@ mat-spinner {
 mat-paginator {
   margin-top: 1rem;
 }
+
+mat-panel-title,
+mat-panel-description,
+span {
+  display: block;
+}

@@ -36,6 +36,25 @@
         >
         <mat-error *ngIf="form.get('university').invalid">Put a course!</mat-error>
       </mat-form-field>
+      <br>
+      <mat-form-field>
+        <input
+        matInput type = "number"
+        formControlName="startingPrice"
+        placeholder= "Post a Starting Price"
+        >
+        <mat-error *ngIf="form.get('startingPrice').invalid">Put a starting price!</mat-error>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <input
+        matInput type = "number"
+        formControlName="minimumAllowedPrice"
+        placeholder= "Post a Minimum Allowed Price"
+        >
+        <mat-error *ngIf="form.get('minimumAllowedPrice').invalid">Put a minimum allowed price!</mat-error>
+      </mat-form-field>
+      <br>
       <div>
         <button mat-stroked-button type="button" (click)="filePicker.click()">Pick image!</button>
         <input type="file" #filePicker (change)="onImagePicked($event)">

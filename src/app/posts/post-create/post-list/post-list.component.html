@@ -4,10 +4,15 @@
   <input type="text" [(ngModel)]="searchAuthor" placeholder="Search Author" />
   <input type="text" [(ngModel)]="searchUniversity" placeholder="Search University" />
   <input type="text" [(ngModel)]="searchCourse" placeholder="Search Course" />
+  <br>
+  <br>
   <mat-expansion-panel *ngFor="let post of posts | filter: searchAuthor : 'author' | filter: searchTitle : 'title' | filter: searchCourse: 'course' | filter: searchUniversity : 'university' ">
     <mat-expansion-panel-header>
-      Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ today| date:'hh:mm:ss'}}, Seller: {{post.creator}}
+      <mat-panel-title>
+        Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ today| date:'hh:mm:ss'}}, Price: {{post.startingPrice}}$
+      </mat-panel-title>
     </mat-expansion-panel-header>
+    <mat-panel-description>
     <p> Author: {{post.author}} </p>
     <p> University: {{post.university}} </p>
     <p> Course: {{post.course}} </p>
@@ -23,6 +28,7 @@
       <a mat-button color = "primary" [routerLink]="['/bid', post.id]"> BID </a>
       <a mat-button color = "primary" [routerLink]="['/message', post.id]"> MESSAGE SELLER </a>
     </mat-action-row>
+  </mat-panel-description>
   </mat-expansion-panel>
 </mat-accordion>
 <mat-paginator *ngIf = "posts.length>0" [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOption" (page)="onChangedPage($event)" ></mat-paginator>

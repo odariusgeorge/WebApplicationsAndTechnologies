@@ -36,7 +36,10 @@ export class PostMessagesComponent implements OnInit {
             course: postData.course,
             university: postData.university,
             author: postData.author,
-            messages: postData.messages
+            messages: postData.messages,
+            startingPrice: postData.startingPrice,
+            minimumAllowedPrice: postData.minimumAllowedPrice,
+            winner: postData.winner
           };
         });
       }
@@ -56,7 +59,10 @@ export class PostMessagesComponent implements OnInit {
       this.post.course,
       this.post.university,
       this.post.author,
-      this.post.messages
+      this.post.messages,
+      this.post.startingPrice,
+      this.post.minimumAllowedPrice,
+      this.post.winner
     );
     this.form.reset();
   }

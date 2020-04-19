@@ -38,7 +38,10 @@ exports.createPost =  (req, res, next) => {
     course: req.body.course,
     university: req.body.university,
     author: req.body.author,
-    messages: req.body.messages
+    messages: req.body.messages,
+    startingPrice: req.body.startingPrice,
+    minimumAllowedPrice: req.body.minimumAllowedPrice,
+    winner: null
   });
   post.save().then(createdPost => {
     res.status(201).json({
@@ -51,7 +54,10 @@ exports.createPost =  (req, res, next) => {
       course: createdPost.course,
       university: createdPost.university,
       author: createdPost.author,
-      messages: createdPost.messages
+      messages: createdPost.messages,
+      startingPrice: createdPost.startingPrice,
+      minimumAllowedPrice: createdPost.minimumAllowedPrice,
+      winner: createdPost.winner
     }
     });
   })
@@ -77,7 +83,10 @@ exports.updatePost = (req, res, next) => {
     course: req.body.course,
     university: req.body.university,
     author: req.body.author,
-    messages: req.body.messages
+    messages: req.body.messages,
+    startingPrice: req.body.startingPrice,
+    minimumAllowedPrice: req.body.minimumAllowedPrice,
+    winner: req.body.winner
   })
 
   Post.updateOne({_id: req.params.id},post).then( result => {

@@ -8,7 +8,10 @@ const postSchema = mongoose.Schema({
   course: {type: String, required: true},
   university: {type: String, required: true},
   author: {type: String, required: true},
-  messages: [{type: String}]
+  messages: [{type: String}],
+  startingPrice: {type: Number, required: true},
+  minimumAllowedPrice: {type: Number, required: true},
+  winner: {type: mongoose.Schema.Types.ObjectId, ref: "User"}
 });
 
 module.exports = mongoose.model('Post', postSchema);
