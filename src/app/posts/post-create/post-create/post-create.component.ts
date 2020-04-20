@@ -33,7 +33,6 @@ export class PostCreateComponent implements OnInit {
       minimumAllowedPrice: new FormControl(null, {validators: [Validators.required]}),
       date: new FormControl(null, {validators: [Validators.required]})
     });
-
     this.route.paramMap.subscribe( (paramMap: ParamMap) => {
       if(paramMap.has('postId')) {
         this.mode = 'edit';

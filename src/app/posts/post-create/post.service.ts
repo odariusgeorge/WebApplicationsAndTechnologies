@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from "../../../environments/environment";
+import { Message } from './message.model';
 
 
 const BACKEND_URL = environment.apiUrl + "/posts";
@@ -52,7 +53,7 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string, messages: Array<string>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date }>(BACKEND_URL+ "/" + id);
+    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string, messages: Array<Message>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date }>(BACKEND_URL+ "/" + id);
   }
 
   addPost(title: string, content: string, image: File, course: string, university: string, author: string, startingPrice: number, minimumAllowedPrice: number, date: Date) {
@@ -76,7 +77,7 @@ export class PostsService {
     });
   }
 
-  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
+  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Message>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
     let postData: Post | FormData;
     if (typeof(imageUpdated) === 'object') {
       postData = new FormData();
@@ -115,7 +116,8 @@ export class PostsService {
     })
   }
 
-  updatePostMessage(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
+  updatePostMessage(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Message>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
+    console.log(messages);
     let postData: Post = {
         id: id,
         title: titleUpdated,
@@ -137,7 +139,7 @@ export class PostsService {
     })
   }
 
-  updateBid(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<string>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
+  updateBid(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Message>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
     console.log(winner);
     let postData: Post = {
         id: id,

@@ -1,5 +1,5 @@
 export interface Message {
-  id: string;
   content: string;
   creator: string;
+  public: boolean;
 }

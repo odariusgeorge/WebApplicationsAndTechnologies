@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+var MessageSchema = require('./message').MessageSchema
+
 const postSchema = mongoose.Schema({
   title: {type: String, required: true},
   content: {type: String, required: true},
@@ -8,7 +10,7 @@ const postSchema = mongoose.Schema({
   course: {type: String, required: true},
   university: {type: String, required: true},
   author: {type: String, required: true},
-  messages: [{type: String}],
+  messages: [MessageSchema],
   startingPrice: {type: Number, required: true},
   minimumAllowedPrice: {type: Number, required: true},
   winner: {type: mongoose.Schema.Types.ObjectId, ref: "User"},

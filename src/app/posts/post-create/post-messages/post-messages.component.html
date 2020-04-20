@@ -12,8 +12,8 @@
       <br> <br>
       <h1 align="center"> Messages </h1>
       <mat-expansion-panel *ngFor="let mes of post.messages">
-        <mat-expansion-panel-header>
-          {{mes}}
+        <mat-expansion-panel-header *ngIf=" mes.public || (post.creator == userId) || (mes.creator == userId) ">
+          {{mes.content}}
         </mat-expansion-panel-header>
       </mat-expansion-panel>
     <br>
@@ -29,6 +29,8 @@
         mat-raised-button
         color = "primary"
         type="submit"> Post Message</button>
+        <br>
+        <mat-checkbox (change)="OnChange($event)">Private Message!</mat-checkbox>
     </form>
 
     </mat-accordion>

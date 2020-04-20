@@ -4,6 +4,8 @@ import { PostsService } from '../post.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Message } from '../message.model';
 
 @Component({
   templateUrl: './post-messages.component.html',
@@ -11,13 +13,18 @@ import { Validators } from '@angular/forms';
 })
 export class PostMessagesComponent implements OnInit {
 
-  constructor(public postsService: PostsService, public route: ActivatedRoute) {}
+  constructor(public postsService: PostsService, public authService: AuthService, public route: ActivatedRoute) {}
   private postId: string;
+  userId: string;
   public post: Post;
   public isLoading = false;
+  public addedMessage: Message;
   form: FormGroup;
+  isChecked: boolean;
 
   ngOnInit() {
+    this.isChecked = false;
+    this.userId = this.authService.getUserId();
     this.form = new FormGroup({
       message: new FormControl(null, {validators: [Validators.required]})
     });
@@ -47,11 +54,20 @@ export class PostMessagesComponent implements OnInit {
     });
   }
 
+  OnChange($event){
+    this.isChecked = !this.isChecked
+}
+
   onPostMessage() {
     if(this.form.invalid) {
       return;
     }
-    this.post.messages.push(this.form.value.message);
+    this.addedMessage = {
+      content: this.form.value.message,
+      creator: this.userId,
+      public: !this.isChecked
+    }
+    this.post.messages.push(this.addedMessage);
     this.postsService.updatePostMessage(
       this.post.id,
       this.post.title,

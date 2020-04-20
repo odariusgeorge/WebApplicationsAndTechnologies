@@ -1,3 +1,5 @@
+import { Message } from './message.model';
+
 export interface Post {
   id: string;
   title: string;
@@ -7,7 +9,7 @@ export interface Post {
   university: string;
   course: string;
   author: string;
-  messages: Array<string>;
+  messages: Array<Message>;
   startingPrice: number;
   minimumAllowedPrice: number;
   winner: string;
