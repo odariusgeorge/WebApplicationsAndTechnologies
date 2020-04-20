@@ -21,6 +21,7 @@ export class PostBidComponent implements OnInit, AfterViewChecked {
   addScript: boolean = false;
   paypalLoad: boolean = false;
   finalAmount: number = 1;
+  currentUser: string;
   paypalConfig = {
     env: 'sandbox',
     client: {
@@ -66,8 +67,12 @@ addPaypalScript() {
 }
 
   ngOnInit() {
+    this.form = new FormGroup({
+      amount: new FormControl(null)
+    });
     this.paypalLoad = true;
     this.addScript = false;
+    this.currentUser = this.authService.getUserId();
     this.route.paramMap.subscribe( (paramMap: ParamMap) => {
       if(paramMap.has('postId')) {
         this.postId = paramMap.get('postId');
@@ -86,18 +91,21 @@ addPaypalScript() {
             messages: postData.messages,
             startingPrice: postData.startingPrice,
             minimumAllowedPrice: postData.minimumAllowedPrice,
-            winner: ""
+            winner: postData.winner
           };
-          this.finalAmount = postData.startingPrice
+          this.finalAmount = postData.startingPrice + 1;
         });
       }
     });
   }
 
   onPostBid() {
-    console.log("smth");
+    if(this.form.invalid || this.form.value.amount <= this.finalAmount) {
+      alert("Ammount should be bigger than current price!");
+      return;
+    }
     this.post.winner = this.authService.getUserId();
-    this.post.startingPrice = this.finalAmount;
+    this.post.startingPrice = this.form.value.amount;
     this.postsService.updateBid(
       this.post.id,
       this.post.title,
@@ -111,5 +119,7 @@ addPaypalScript() {
       this.post.minimumAllowedPrice,
       this.post.winner
     );
+    this.finalAmount = this.post.startingPrice;
+    this.form.reset();
   }
 }
