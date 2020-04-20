@@ -9,7 +9,7 @@
   <mat-expansion-panel *ngFor="let post of posts | filter: searchAuthor : 'author' | filter: searchTitle : 'title' | filter: searchCourse: 'course' | filter: searchUniversity : 'university' ">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ today| date:'hh:mm:ss'}}, Price: {{post.startingPrice}}$
+        Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ post.date - today | date:'dd:hh:mm:ss'}}, Price: {{post.startingPrice}}$
       </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-panel-description>

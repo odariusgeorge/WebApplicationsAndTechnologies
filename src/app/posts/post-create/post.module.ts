@@ -9,6 +9,8 @@ import { JsonFilterByPipe } from '../../helpers/json-filter-by.pipe'
 import { FilterPipe } from '../../helpers/filter.pipe';
 import { PostMessagesComponent } from './post-messages/post-messages.component';
 import { PostBidComponent } from './post-bid/post-bid.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -25,7 +27,9 @@ import { PostBidComponent } from './post-bid/post-bid.component';
     ReactiveFormsModule,
     AngularMaterialModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class PostsModule {}

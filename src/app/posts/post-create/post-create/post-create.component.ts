@@ -30,7 +30,8 @@ export class PostCreateComponent implements OnInit {
       university: new FormControl(null, {validators: [Validators.required]}),
       image: new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]}),
       startingPrice: new FormControl(null, {validators: [Validators.required]}),
-      minimumAllowedPrice: new FormControl(null, {validators: [Validators.required]})
+      minimumAllowedPrice: new FormControl(null, {validators: [Validators.required]}),
+      date: new FormControl(null, {validators: [Validators.required]})
     });
 
     this.route.paramMap.subscribe( (paramMap: ParamMap) => {
@@ -52,7 +53,8 @@ export class PostCreateComponent implements OnInit {
             messages: postData.messages,
             startingPrice: postData.startingPrice,
             minimumAllowedPrice: postData.minimumAllowedPrice,
-            winner: postData.winner
+            winner: postData.winner,
+            date: postData.date
           };
           this.form.setValue({
             title: this.post.title,
@@ -62,7 +64,8 @@ export class PostCreateComponent implements OnInit {
             university: this.post.university,
             author: this.post.author,
             startingPrice: this.post.startingPrice,
-            minimumAllowedPrice: this.post.minimumAllowedPrice
+            minimumAllowedPrice: this.post.minimumAllowedPrice,
+            date: this.post.date
           });
         });
       } else {
@@ -97,7 +100,8 @@ export class PostCreateComponent implements OnInit {
         this.form.value.university,
         this.form.value.author,
         this.form.value.startingPrice,
-        this.form.value.minimumAllowedPrice
+        this.form.value.minimumAllowedPrice,
+        this.form.value.date
       );
     } else {
       this.postsService.updatePost(
@@ -111,7 +115,8 @@ export class PostCreateComponent implements OnInit {
         this.post.messages,
         this.post.startingPrice,
         this.post.minimumAllowedPrice,
-        this.post.winner
+        this.post.winner,
+        this.post.date
         );
     }
     this.form.reset();

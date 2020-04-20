@@ -11,4 +11,5 @@ export interface Post {
   startingPrice: number;
   minimumAllowedPrice: number;
   winner: string;
+  date: Date;
 }

@@ -30,6 +30,7 @@ exports.getPosts = (req, res, next) => {
 
 exports.createPost =  (req, res, next) => {
   const url = req.protocol + '://' + req.get("host");
+  console.log(req.body.date);
   const post = new Post({
     title: req.body.title,
     content: req.body.content,
@@ -41,7 +42,8 @@ exports.createPost =  (req, res, next) => {
     messages: req.body.messages,
     startingPrice: req.body.startingPrice,
     minimumAllowedPrice: req.body.minimumAllowedPrice,
-    winner: null
+    winner: null,
+    date: req.body.date
   });
   post.save().then(createdPost => {
     res.status(201).json({
@@ -57,7 +59,8 @@ exports.createPost =  (req, res, next) => {
       messages: createdPost.messages,
       startingPrice: createdPost.startingPrice,
       minimumAllowedPrice: createdPost.minimumAllowedPrice,
-      winner: createdPost.winner
+      winner: createdPost.winner,
+      date: createdPost.date
     }
     });
   })
@@ -86,7 +89,8 @@ exports.updatePost = (req, res, next) => {
     messages: req.body.messages,
     startingPrice: req.body.startingPrice,
     minimumAllowedPrice: req.body.minimumAllowedPrice,
-    winner: req.body.winner
+    winner: req.body.winner,
+    date: req.body.date
   })
 
   Post.updateOne({_id: req.params.id},post).then( result => {

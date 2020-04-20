@@ -39,7 +39,8 @@ export class PostMessagesComponent implements OnInit {
             messages: postData.messages,
             startingPrice: postData.startingPrice,
             minimumAllowedPrice: postData.minimumAllowedPrice,
-            winner: postData.winner
+            winner: postData.winner,
+            date: postData.date
           };
         });
       }
@@ -62,7 +63,8 @@ export class PostMessagesComponent implements OnInit {
       this.post.messages,
       this.post.startingPrice,
       this.post.minimumAllowedPrice,
-      this.post.winner
+      this.post.winner,
+      this.post.date
     );
     this.form.reset();
   }
