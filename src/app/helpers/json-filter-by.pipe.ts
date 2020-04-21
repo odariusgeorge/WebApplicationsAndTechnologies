@@ -15,7 +15,6 @@ export class JsonFilterByPipe implements PipeTransform {
     json.forEach( function ( filterObjectEntery ) {
 
       if( filterObjectEntery.hasOwnProperty( jsonKey ) ) {
-        console.log('Search key is available in JSON object.');
 
         if ( typeof filterObjectEntery[jsonKey] != "undefined" &&
         filterObjectEntery[jsonKey].toLowerCase().indexOf(searchText.toLowerCase()) > -1 ) {
@@ -23,7 +22,6 @@ export class JsonFilterByPipe implements PipeTransform {
             returnObjects = returnObjects.filter(obj => obj !== filterObjectEntery);
         }
       } else {
-        console.log('Search key is not available in JSON object.');
       }
 
     })

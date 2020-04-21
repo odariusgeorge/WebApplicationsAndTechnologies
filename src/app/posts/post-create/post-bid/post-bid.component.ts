@@ -39,7 +39,6 @@ export class PostBidComponent implements OnInit, AfterViewChecked {
     },
     onAuthorize: (data, actions) => {
       return actions.payment.execute().then((payment) => {
-        console.log(payment);
       });
   },
   onClick: () => {

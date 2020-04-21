@@ -42,7 +42,6 @@ export class PostsService {
         }), maxPosts: postData.maxPosts};
       }))
       .subscribe( transformedPosts => {
-        console.log(transformedPosts);
         this.posts = transformedPosts.posts;
         this.postsUpdated.next({posts: [...this.posts], postCount: transformedPosts.maxPosts});
       });
@@ -231,12 +230,10 @@ export class PostsService {
       }
     this.http.put(BACKEND_URL + "/" + id, postData)
     .subscribe(response => {
-      console.log(response);
     })
   }
 
   updateBid(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
-    console.log(winner);
     let postData: Post = {
         id: id,
         title: titleUpdated,
@@ -254,7 +251,6 @@ export class PostsService {
       }
     this.http.put(BACKEND_URL + "/" + id, postData)
     .subscribe(response => {
-      console.log(response);
     })
   }
 

@@ -30,7 +30,6 @@ exports.getPosts = (req, res, next) => {
 
 exports.createPost =  (req, res, next) => {
   const url = req.protocol + '://' + req.get("host");
-  console.log(req.body.date);
   const post = new Post({
     title: req.body.title,
     content: req.body.content,

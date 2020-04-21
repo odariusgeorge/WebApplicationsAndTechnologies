@@ -81,6 +81,5 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   onBid(amount: number) {
-    console.log(amount);
   }
 }
