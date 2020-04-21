@@ -48,6 +48,103 @@ export class PostsService {
       });
   }
 
+  getPostsSelling(postsPerPage: number, currentPage: number, userId: string) {
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    this.http
+    .get<{message: string, posts: any, maxPosts: number}>(
+      BACKEND_URL+queryParams
+      )
+      .pipe(map(postData => {
+        return {
+          posts: postData.posts.map( post => {
+          return {
+            title: post.title,
+            content: post.content,
+            id: post._id,
+            imagePath: post.imagePath,
+            creator: post.creator,
+            course: post.course,
+            university: post.university,
+            author: post.author,
+            startingPrice: post.startingPrice,
+            minimumAllowedPrice: post.minimumAllowedPrice,
+            date: new Date(post.date)
+          };
+        }), maxPosts: postData.maxPosts};
+      }))
+      .subscribe( transformedPosts => {
+        this.posts = transformedPosts.posts;
+        this.posts = this.posts.filter((post: Post) => post.creator == userId)
+        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
+      });
+  }
+
+  getPostsWinner(postsPerPage: number, currentPage: number, userId: string) {
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    this.http
+    .get<{message: string, posts: any, maxPosts: number}>(
+      BACKEND_URL+queryParams
+      )
+      .pipe(map(postData => {
+        return {
+          posts: postData.posts.map( post => {
+          return {
+            title: post.title,
+            content: post.content,
+            id: post._id,
+            imagePath: post.imagePath,
+            creator: post.creator,
+            course: post.course,
+            university: post.university,
+            author: post.author,
+            startingPrice: post.startingPrice,
+            minimumAllowedPrice: post.minimumAllowedPrice,
+            winner: post.winner,
+            date: new Date(post.date)
+          };
+        }), maxPosts: postData.maxPosts};
+      }))
+      .subscribe( transformedPosts => {
+        this.posts = transformedPosts.posts;
+        this.posts = this.posts.filter((post: Post) => post.winner == userId)
+        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
+      });
+  }
+
+  getPostsExpired(postsPerPage: number, currentPage: number) {
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    this.http
+    .get<{message: string, posts: any, maxPosts: number}>(
+      BACKEND_URL+queryParams
+      )
+      .pipe(map(postData => {
+        return {
+          posts: postData.posts.map( post => {
+          return {
+            title: post.title,
+            content: post.content,
+            id: post._id,
+            imagePath: post.imagePath,
+            creator: post.creator,
+            course: post.course,
+            university: post.university,
+            author: post.author,
+            startingPrice: post.startingPrice,
+            minimumAllowedPrice: post.minimumAllowedPrice,
+            winner: post.winner,
+            date: new Date(post.date)
+          };
+        }), maxPosts: postData.maxPosts};
+      }))
+      .subscribe( transformedPosts => {
+        this.posts = transformedPosts.posts;
+        this.posts = this.posts.filter((post: Post) => new Date(post.date) < new Date(Date.now()) )
+        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
+      });
+  }
+
+
+
   getPostUpdateListener() {
     return this.postsUpdated.asObservable();
   }

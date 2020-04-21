@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PostListComponent } from '../post-create/post-list/post-list.component';
+import { PostListSellingComponent } from '../post-create/post-list-selling/post-list-selling.component';
+import { PostListBuyingComponent } from '../post-create/post-list-buying/post-list-buying.component';
+import { PostListExpiredComponent } from '../post-create/post-list-expired/post-list-expired.component';
 import { PostCreateComponent } from '../post-create/post-create/post-create.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { AngularMaterialModule } from 'src/app/angular-material.module';
@@ -17,6 +20,9 @@ import { MatNativeDateModule } from '@angular/material/core';
   declarations: [
     PostListComponent,
     PostCreateComponent,
+    PostListSellingComponent,
+    PostListBuyingComponent,
+    PostListExpiredComponent,
     PostMessagesComponent,
     PostBidComponent,
     JsonFilterByPipe,

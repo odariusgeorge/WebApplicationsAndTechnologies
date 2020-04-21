@@ -86,7 +86,8 @@ export class PostCreateComponent implements OnInit {
   }
 
   onSavePost() {
-    if(this.form.invalid) {
+    if(this.form.invalid || this.form.value.startingPrice <= 0 || this.form.value.minimumAllowedPrice <= 0) {
+      window.alert("Introduce all the fields and the image! Prices should be bigger than 0!");
       return;
     }
     this.isLoading = true;

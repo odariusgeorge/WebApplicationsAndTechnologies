@@ -5,7 +5,16 @@
       <li *ngIf="userIsAdmin">
         <a mat-button routerLink="/createModerator" routerLinkActive="mat-accent">Add Moderator</a>
       </li>
-      <li *ngIf="userIsAuthenticated">
+      <li *ngIf="userIsAdmin">
+        <a mat-button routerLink="/postListExpired" routerLinkActive="mat-accent">Expired Post</a>
+      </li>
+      <li *ngIf="userIsAuthenticated && !userIsAdmin">
+        <a mat-button routerLink="/postListSelling" routerLinkActive="mat-accent">My posts</a>
+      </li>
+      <li *ngIf="userIsAuthenticated && !userIsAdmin">
+        <a mat-button routerLink="/postListBuying" routerLinkActive="mat-accent">My bids</a>
+      </li>
+      <li *ngIf="userIsAuthenticated && !userIsAdmin">
         <a mat-button routerLink="/createPost" routerLinkActive="mat-accent">New post</a>
       </li>
       <li *ngIf="!userIsAuthenticated">

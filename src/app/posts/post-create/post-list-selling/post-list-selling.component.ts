@@ -4,17 +4,13 @@ import { PostsService } from '../post.service';
 import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from '../../../auth/auth.service';
-import { formatDate } from '@angular/common';
-
-declare let paypal: any;
 
 @Component({
-  selector: 'app-post-list',
-  templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.css']
+  templateUrl: './post-list-selling.component.html',
+  styleUrls: ['./post-list-selling.component.css']
 })
 
-export class PostListComponent implements OnInit, OnDestroy {
+export class PostListSellingComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
 
   isLoading = false;
@@ -32,7 +28,6 @@ export class PostListComponent implements OnInit, OnDestroy {
   searchUniversity: string;
   searchCourse: string;
   today = Date.now();
-  expired: boolean;
 
 
   constructor(public postsService: PostsService, private authService: AuthService) {
@@ -42,8 +37,8 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoading = true;
-    this.postsService.getPosts(this.postsPerPage, this.currentPage);
     this.userId = this.authService.getUserId();
+    this.postsService.getPostsSelling(this.postsPerPage, this.currentPage, this.userId);
     this.postsSub = this.postsService.getPostUpdateListener()
     .subscribe(
       (postData: {posts: Post[], postCount: number}) =>  {
@@ -66,21 +61,10 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.authStatusSub.unsubscribe();
   }
 
-  onDelete(postId: string) {
-    this.isLoading = true;
-    this.postsService.deletePost(postId).subscribe( () => {
-      this.postsService.getPosts(this.postsPerPage, this.currentPage);
-    });
-  }
-
   onChangedPage(pageData: PageEvent) {
     this.isLoading = true
     this.currentPage = pageData.pageIndex + 1;
     this.postsPerPage = pageData.pageSize;
-    this.postsService.getPosts(this.postsPerPage, this.currentPage);
-  }
-
-  onBid(amount: number) {
-    console.log(amount);
+    this.postsService.getPostsSelling(this.postsPerPage, this.currentPage, this.userId);
   }
 }
