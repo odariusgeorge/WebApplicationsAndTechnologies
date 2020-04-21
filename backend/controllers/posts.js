@@ -82,7 +82,6 @@ exports.updatePost = (req, res, next) => {
     title: req.body.title,
     content: req.body.content,
     imagePath: imagePath,
-    creator: req.userData.userId,
     course: req.body.course,
     university: req.body.university,
     author: req.body.author,

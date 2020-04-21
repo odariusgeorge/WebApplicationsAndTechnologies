@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { Post } from '../post.model';
 import { PostsService } from '../post.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormControlDirective, FormArray } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Message } from '../message.model';
@@ -19,6 +19,7 @@ export class PostMessagesComponent implements OnInit {
   public post: Post;
   public isLoading = false;
   public addedMessage: Message;
+  public addedReply: Message;
   form: FormGroup;
   isChecked: boolean;
 
@@ -26,7 +27,23 @@ export class PostMessagesComponent implements OnInit {
     this.isChecked = false;
     this.userId = this.authService.getUserId();
     this.form = new FormGroup({
-      message: new FormControl(null, {validators: [Validators.required]})
+      message: new FormControl(null, {validators: [Validators.required]}),
+      replies: new FormArray([new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null),
+                              new FormControl(null)])
     });
     this.route.paramMap.subscribe( (paramMap: ParamMap) => {
       if(paramMap.has('postId')) {
@@ -58,6 +75,30 @@ export class PostMessagesComponent implements OnInit {
     this.isChecked = !this.isChecked
 }
 
+  onPostReply(index: number) {
+    this.addedReply = {
+      content: this.form.value.replies[index],
+      creator: this.userId,
+      public: true
+    }
+    this.post.messages[index].push(this.addedReply);
+    this.postsService.updatePostMessage(
+      this.post.id,
+      this.post.title,
+      this.post.content,
+      this.post.imagePath,
+      this.post.course,
+      this.post.university,
+      this.post.author,
+      this.post.messages,
+      this.post.startingPrice,
+      this.post.minimumAllowedPrice,
+      this.post.winner,
+      this.post.date
+    );
+    this.form.reset();
+  }
+
   onPostMessage() {
     if(this.form.invalid) {
       return;
@@ -67,7 +108,7 @@ export class PostMessagesComponent implements OnInit {
       creator: this.userId,
       public: !this.isChecked
     }
-    this.post.messages.push(this.addedMessage);
+    this.post.messages.push([this.addedMessage]);
     this.postsService.updatePostMessage(
       this.post.id,
       this.post.title,

@@ -9,7 +9,7 @@ export interface Post {
   university: string;
   course: string;
   author: string;
-  messages: Array<Message>;
+  messages: Array<Array<Message>>;
   startingPrice: number;
   minimumAllowedPrice: number;
   winner: string;
