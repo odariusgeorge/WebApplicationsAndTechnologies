@@ -7,8 +7,10 @@ export class AdminGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
   canActivate(route: import("@angular/router").ActivatedRouteSnapshot, state: import("@angular/router").RouterStateSnapshot): boolean | import("@angular/router").UrlTree | import("rxjs").Observable<boolean | import("@angular/router").UrlTree> | Promise<boolean | import("@angular/router").UrlTree> {
     const isAdmin = this.authService.getIsAdmin();
-    if(!isAdmin) {
-      this.router.navigate(['/postList'], {skipLocationChange: true});
+    const isVerified = this.authService.getIsVerified();
+    if(!isAdmin || !isVerified) {
+      this.authService.logout();
+      this.router.navigate(['/login'], {skipLocationChange: true});
     }
     return isAdmin;
   }

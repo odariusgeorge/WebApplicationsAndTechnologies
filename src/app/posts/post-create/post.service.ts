@@ -117,7 +117,6 @@ export class PostsService {
   }
 
   updatePostMessage(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
-    console.log(messages);
     let postData: Post = {
         id: id,
         title: titleUpdated,

@@ -9,7 +9,8 @@ exports.createUser =  (req, res, next) => {
   const user = new User({
     email: req.body.email,
     password: hash,
-    admin: req.body.admin
+    admin: req.body.admin,
+    isVerified: req.body.isVerified
   });
   user.save()
   .then(result => {
@@ -32,7 +33,8 @@ exports.createModerator =  (req, res, next) => {
   const user = new User({
     email: req.body.email,
     password: hash,
-    admin: req.body.admin
+    admin: req.body.admin,
+    isVerified: req.body.isVerified
   });
   user.save()
   .then(result => {
@@ -49,6 +51,26 @@ exports.createModerator =  (req, res, next) => {
 })
 }
 
+exports.modifyPassword = (req, res, next) => {
+  bcrypt.hash(req.body.password, 10)
+  .then(hash => {
+    const user = new User ({
+      email: req.body.email,
+      password: hash,
+      isAdmin: req.body.isAdmin,
+      isVerified: req.body.isVerified,
+
+    })
+    User.findOneAndUpdate({_id:req.params.id}, {$set:{password: hash, isVerified: true}}, {new: true}, (err, usr) => {
+      if(err) {
+        res.status(401).json({message:"Wrong"});
+      } else
+      res.status(200).json({message: 'Update successful!'});
+    });
+
+
+  });
+}
 exports.userLogin =  (req, res, next) => {
   let fetchedUser;
   User.findOne({ email: req.body.email })
@@ -67,7 +89,8 @@ exports.userLogin =  (req, res, next) => {
       token: token,
       expiresIn: 3600,
       userId: fetchedUser._id,
-      admin: fetchedUser.admin
+      admin: fetchedUser.admin,
+      isVerified: fetchedUser.isVerified
     });
   })
   .catch(err => {

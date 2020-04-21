@@ -9,6 +9,7 @@ import { PostBidComponent } from './posts/post-create/post-bid/post-bid.componen
 import { CreateModeratorComponent } from './auth/createModerator/createModerator.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AdminGuard } from './auth/admin.guard';
+import { ModifyPasswordComponent } from './auth/modifyPassword/modifyPassword.component';
 
 
 
@@ -33,6 +34,9 @@ const routes: Routes = [
   },
   {
     path: 'createModerator', component: CreateModeratorComponent, canActivate: [AdminGuard]
+  },
+  {
+    path: 'modifyPassword', component: ModifyPasswordComponent
   },
   {
     path: 'message/:postId', component: PostMessagesComponent, canActivate: [AuthGuard]
