@@ -17,7 +17,7 @@ export class PostsService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getPosts(postsPerPage: number, currentPage: number) {
+  getPosts(postsPerPage: number, currentPage: number, userId: string) {
     const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
@@ -43,7 +43,8 @@ export class PostsService {
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.postsUpdated.next({posts: [...this.posts], postCount: transformedPosts.maxPosts});
+        this.posts = this.posts.filter((post: Post) => new Date(post.date) > new Date(Date.now()) && post.creator != userId)
+        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
       });
   }
 
@@ -78,7 +79,7 @@ export class PostsService {
       });
   }
 
-  getPostsWinner(postsPerPage: number, currentPage: number, userId: string) {
+  getPostsBiding(postsPerPage: number, currentPage: number, userId: string) {
     const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
@@ -105,7 +106,39 @@ export class PostsService {
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => post.winner == userId)
+        this.posts = this.posts.filter((post: Post) => post.winner == userId && new Date(post.date) > new Date(Date.now()))
+        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
+      });
+  }
+
+  getPostsWon(postsPerPage: number, currentPage: number, userId: string) {
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    this.http
+    .get<{message: string, posts: any, maxPosts: number}>(
+      BACKEND_URL+queryParams
+      )
+      .pipe(map(postData => {
+        return {
+          posts: postData.posts.map( post => {
+          return {
+            title: post.title,
+            content: post.content,
+            id: post._id,
+            imagePath: post.imagePath,
+            creator: post.creator,
+            course: post.course,
+            university: post.university,
+            author: post.author,
+            startingPrice: post.startingPrice,
+            minimumAllowedPrice: post.minimumAllowedPrice,
+            winner: post.winner,
+            date: new Date(post.date)
+          };
+        }), maxPosts: postData.maxPosts};
+      }))
+      .subscribe( transformedPosts => {
+        this.posts = transformedPosts.posts;
+        this.posts = this.posts.filter((post: Post) => post.winner == userId && new Date(post.date) < new Date(Date.now()) && post.startingPrice>=post.minimumAllowedPrice)
         this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
       });
   }
@@ -137,7 +170,7 @@ export class PostsService {
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => new Date(post.date) < new Date(Date.now()) )
+        this.posts = this.posts.filter((post: Post) => new Date(post.date) < new Date(Date.now()) && post.minimumAllowedPrice > post.startingPrice)
         this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
       });
   }

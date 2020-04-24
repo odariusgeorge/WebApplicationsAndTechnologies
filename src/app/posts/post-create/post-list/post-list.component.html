@@ -27,13 +27,14 @@
       <a mat-button color = "primary" [routerLink]="['/edit', post.id]"> EDIT </a>
       <button mat-button color = "warn" (click) = "onDelete(post.id)"> DELETE </button>
     </mat-action-row>
-    <mat-action-row *ngIf="userIsAuthenticated && !userIsAdmin && userId!= post.creator">
-      <a mat-button color = "primary" [routerLink]="['/bid', post.id]"> BID </a>
-      <a mat-button color = "primary" [routerLink]="['/message', post.id]"> MESSAGE SELLER </a>
+    <mat-action-row *ngIf="userIsAuthenticated && !userIsAdmin">
+      <a mat-button color = "primary" [routerLink]="['/bid', post.id]" *ngIf="userId!= post.creator"> BID </a>
+      <a mat-button color = "primary" [routerLink]="['/message', post.id]" *ngIf="userId!= post.creator"> MESSAGE SELLER </a>
+      <a mat-button color = "primary" [routerLink]="['/message', post.id]" *ngIf="userId == post.creator"> SEE MESSAGES ON YOUR POST </a>
     </mat-action-row>
   </mat-panel-description>
   </mat-expansion-panel>
 </mat-accordion>
-<mat-paginator *ngIf = "posts.length>0" [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOption" (page)="onChangedPage($event)" ></mat-paginator>
+<!-- <mat-paginator *ngIf = "posts.length>0" [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOption" (page)="onChangedPage($event)" ></mat-paginator> -->
 <p class = "info-text mat-body-1" *ngIf="posts.length == 0 && !isLoading">No posts added yet!</p>
 

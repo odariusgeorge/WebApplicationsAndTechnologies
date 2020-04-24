@@ -14,6 +14,7 @@ import { PostMessagesComponent } from './post-messages/post-messages.component';
 import { PostBidComponent } from './post-bid/post-bid.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { PostListWonComponent } from './post-list-won/post-list-won.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     PostListSellingComponent,
     PostListBuyingComponent,
     PostListExpiredComponent,
+    PostListWonComponent,
     PostMessagesComponent,
     PostBidComponent,
     JsonFilterByPipe,

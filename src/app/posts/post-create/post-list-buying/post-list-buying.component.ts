@@ -38,7 +38,7 @@ export class PostListBuyingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoading = true;
     this.userId = this.authService.getUserId();
-    this.postsService.getPostsWinner(this.postsPerPage, this.currentPage, this.userId);
+    this.postsService.getPostsBiding(this.postsPerPage, this.currentPage, this.userId);
     this.postsSub = this.postsService.getPostUpdateListener()
     .subscribe(
       (postData: {posts: Post[], postCount: number}) =>  {
@@ -65,6 +65,6 @@ export class PostListBuyingComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.currentPage = pageData.pageIndex + 1;
     this.postsPerPage = pageData.pageSize;
-    this.postsService.getPostsWinner(this.postsPerPage, this.currentPage, this.userId);
+    this.postsService.getPostsBiding(this.postsPerPage, this.currentPage, this.userId);
   }
 }

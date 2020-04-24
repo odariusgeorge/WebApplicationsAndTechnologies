@@ -13,6 +13,7 @@ import { CreateModeratorComponent } from './auth/createModerator/createModerator
 import { AuthGuard } from './auth/auth.guard';
 import { AdminGuard } from './auth/admin.guard';
 import { ModifyPasswordComponent } from './auth/modifyPassword/modifyPassword.component';
+import { PostListWonComponent } from './posts/post-create/post-list-won/post-list-won.component';
 
 
 
@@ -30,10 +31,13 @@ const routes: Routes = [
     path: 'postListBuying', component: PostListBuyingComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'postListExpired', component: PostListExpiredComponent, canActivate: [AdminGuard]
+    path: 'postListWon', component: PostListWonComponent, canActivate: [AuthGuard]
   },
   {
     path: 'createPost', component: PostCreateComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'postListExpired', component: PostListExpiredComponent, canActivate: [AdminGuard]
   },
   {
     path: 'edit/:postId', component: PostCreateComponent, canActivate: [AdminGuard]
