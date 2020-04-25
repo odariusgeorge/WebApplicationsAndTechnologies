@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { JsonFilterByPipe } from '../../helpers/json-filter-by.pipe'
 import { FilterPipe } from '../../helpers/filter.pipe';
+import { FilterPipeNumberLow } from '../../helpers/filter.pipe';
+import { FilterPipeNumberHigh } from '../../helpers/filter.pipe';
 import { PostMessagesComponent } from './post-messages/post-messages.component';
 import { PostBidComponent } from './post-bid/post-bid.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -28,7 +30,9 @@ import { PostListWonComponent } from './post-list-won/post-list-won.component';
     PostMessagesComponent,
     PostBidComponent,
     JsonFilterByPipe,
-    FilterPipe
+    FilterPipe,
+    FilterPipeNumberLow,
+    FilterPipeNumberHigh
   ],
   imports: [
     CommonModule,

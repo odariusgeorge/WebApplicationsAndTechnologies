@@ -7,16 +7,12 @@ export class FilterPipe implements PipeTransform {
 
   transform(items: any[], searchText: string, fieldName: string): any[] {
 
-    // return empty array if array is falsy
     if (!items) { return []; }
 
-    // return the original array if search text is empty
     if (!searchText) { return items; }
 
-    // convert the searchText to lower case
     searchText = searchText.toLowerCase();
 
-    // retrun the filtered array
     return items.filter(item => {
       if (item && item[fieldName]) {
         return item[fieldName].toLowerCase().includes(searchText);
@@ -24,4 +20,48 @@ export class FilterPipe implements PipeTransform {
       return false;
     });
    }
+
+}
+
+
+@Pipe({
+  name: 'filterNumberLow'
+})
+export class FilterPipeNumberLow implements PipeTransform {
+
+  transform(items: any[], searchText: number, fieldName: string): any[] {
+
+    if (!items) { return []; }
+
+    if (!searchText) { return items; }
+
+    return items.filter(item => {
+      if (item && item[fieldName] >= searchText ) {
+        return item[fieldName];
+      }
+      return false;
+    });
+   }
+
+}
+
+@Pipe({
+  name: 'filterNumberHigh'
+})
+export class FilterPipeNumberHigh implements PipeTransform {
+
+  transform(items: any[], searchText: number, fieldName: string): any[] {
+
+    if (!items) { return []; }
+
+    if (!searchText) { return items; }
+
+    return items.filter(item => {
+      if (item && item[fieldName] <= searchText ) {
+        return item[fieldName];
+      }
+      return false;
+    });
+   }
+
 }

@@ -4,7 +4,6 @@ import { PostsService } from '../post.service';
 import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from '../../../auth/auth.service';
-import { formatDate } from '@angular/common';
 
 declare let paypal: any;
 
@@ -31,6 +30,8 @@ export class PostListComponent implements OnInit, OnDestroy {
   searchAuthor: string;
   searchUniversity: string;
   searchCourse: string;
+  searchMinimumPrice: number;
+  searchMaximumPrice: number;
   today = Date.now();
   expired: boolean;
 
