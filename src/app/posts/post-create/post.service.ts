@@ -17,8 +17,8 @@ export class PostsService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getPosts(postsPerPage: number, currentPage: number, userId: string, author: string, title: string, university: string, course: string) {
-    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&creatorId=${userId}&author=${author}&title=${title}&university=${university}&course=${course}&date=${true}`;
+  getPosts(postsPerPage: number, currentPage: number, userId: string, author: string, title: string, university: string, course: string, minPrice: number, maxPrice: number) {
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&creatorId=${userId}&author=${author}&title=${title}&university=${university}&course=${course}&date=${true}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
       BACKEND_URL+queryParams
@@ -49,7 +49,7 @@ export class PostsService {
   }
 
   getPostsSelling(postsPerPage: number, currentPage: number, userId: string) {
-    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&owner=${userId}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
       BACKEND_URL+queryParams
@@ -75,13 +75,12 @@ export class PostsService {
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => post.creator == userId)
-        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
+        this.postsUpdated.next({posts: [...this.posts], postCount: transformedPosts.maxPosts});
       });
   }
 
   getPostsBiding(postsPerPage: number, currentPage: number, userId: string) {
-    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&bidder=${userId}&date=${true}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
       BACKEND_URL+queryParams
@@ -108,13 +107,12 @@ export class PostsService {
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => post.winner == userId && new Date(post.date) > new Date(Date.now()))
-        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
+        this.postsUpdated.next({posts: [...this.posts], postCount: transformedPosts.maxPosts});
       });
   }
 
   getPostsWon(postsPerPage: number, currentPage: number, userId: string) {
-    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&winner=${userId}&date=${false}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
       BACKEND_URL+queryParams
@@ -141,13 +139,13 @@ export class PostsService {
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => post.winner == userId && new Date(post.date) < new Date(Date.now()) && post.startingPrice>=post.minimumAllowedPrice && post.bought == false)
+        this.posts = this.posts.filter((post: Post) => post.startingPrice>=post.minimumAllowedPrice && post.bought == false)
         this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
       });
   }
 
   getPostsBought(postsPerPage: number, currentPage: number, userId: string) {
-    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&boughter=${userId}&date=${false}&bought=${true}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
       BACKEND_URL+queryParams
@@ -174,8 +172,7 @@ export class PostsService {
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => post.winner == userId && post.bought == true)
-        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
+        this.postsUpdated.next({posts: [...this.posts], postCount: transformedPosts.maxPosts});
       });
   }
 

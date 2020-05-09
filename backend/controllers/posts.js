@@ -4,89 +4,50 @@ exports.getPosts = (req, res, next) => {
   const pageSize = +req.query.pageSize;
   const currentPage = +req.query.page;
 
-  if(req.query.date == 'true') {
-    if(req.query.author=='undefined' || req.query.author == undefined) { req.query.author = ""}
-    if(req.query.title=='undefined' || req.query.title == undefined) { req.query.title = ""}
-    if(req.query.university=='undefined' || req.query.university == undefined) { req.query.university = ""}
-    if(req.query.course=='undefined' || req.query.course == undefined) { req.query.course = ""}
+  let query = {};
 
-    const postQuery = Post.find({
-          "author" : { $regex: req.query.author, $options: 'i'},
-          "title" : { $regex: req.query.title, $options: 'i'},
-          "university" : { $regex: req.query.university, $options: 'i'},
-          "course" : { $regex: req.query.course, $options: 'i'},
-          "date": { $gte: new Date(Date.now()) }
-    });
-    const counter = Post.find({
-      "author": { $regex: req.query.author, $options: 'i'},
-      "title" : { $regex: req.query.title, $options: 'i'},
-      "university" : { $regex: req.query.university, $options: 'i'},
-      "course" : { $regex: req.query.course, $options: 'i'},
-      "date": { $gte: new Date(Date.now()) }
-    }).countDocuments();
+  if(!(req.query.author=='undefined' || req.query.author == undefined)) { query.author = {$regex: req.query.author, $options: 'i' }}
+  if(!(req.query.title=='undefined' || req.query.title == undefined)) { query.title = {$regex: req.query.title, $options: 'i'} }
+  if(!(req.query.university=='undefined' || req.query.university == undefined)) { query.university = { $regex: req.query.university, $options: 'i'}}
+  if(!(req.query.course=='undefined' || req.query.course == undefined)) { query.course = { $regex: req.query.course, $options: 'i' }}
+  if(!(req.query.minPrice=='undefined' || req.query.minPrice == undefined)) { query.startingPrice = { $gte: req.query.minPrice }}
+  if(!(req.query.maxPrice=='undefined' || req.query.maxPrice == undefined)) { query.startingPrice = { $lte: req.query.maxPrice }}
+  if(!(req.query.maxPrice=='undefined' || req.query.maxPrice == undefined) && !(req.query.minPrice=='undefined' || req.query.minPrice == undefined)) { query.startingPrice = { $lte: req.query.maxPrice, $gte:req.query.minPrice }}
+  if(!(req.query.creatorId =='null' || req.query.creatorId == 'undefined' || req.query.creatorId == undefined)) { query.creator = {$ne: req.query.creatorId}}
+  if(req.query.date == 'true') { query.date = { $gte: new Date(Date.now())}} else if(req.query.date == 'false') { query.date = { $lt: new Date(Date.now())} }
+  if(!(req.query.owner == undefined ||req.query.owner == 'undefined')) { query.creator = {$eq: req.query.owner}}
+  if(!(req.query.bidder == undefined || req.query.bidder == 'undefined')) { query.winner = {$eq: req.query.bidder}}
+  if(!(req.query.winner == undefined || req.query.winner == 'undefined')) { query.winner = {$eq: req.query.winner}}
+  if(!(req.query.boughter == undefined || req.query.boughter == 'undefined')) { query.winner = {$eq: req.query.boughter}}
+  if(req.query.bought == 'true') { query.bought = {$eq: req.query.bought}}
 
-    let fetchedPosts;
-    if (pageSize && currentPage) {
+  const postQuery = Post.find(query);
+  const counter = Post.find(query).countDocuments();
+
+  let fetchedPosts;
+  if (pageSize && currentPage) {
       postQuery
       .skip(pageSize * (currentPage-1))
       .limit(pageSize);
-    }
-    postQuery
-    .then( documents => {
-      fetchedPosts = documents;
-      return counter;
-    }).then( count => {
-      res.status(200).json({
-        message: "Posts fetched successfully!",
-        posts: fetchedPosts,
-        maxPosts: count
-      });
-    })
-    .catch(error => {
-      res.status(500).json({
-        message: "Fetching posts failed!"
-      });
-    });
-  } else {
-    if(req.query.author=='undefined' || req.query.author == undefined) { req.query.author = ""}
-    if(req.query.title=='undefined' || req.query.title == undefined) { req.query.title = ""}
-    if(req.query.university=='undefined' || req.query.university == undefined) { req.query.university = ""}
-    if(req.query.course=='undefined' || req.query.course == undefined) { req.query.course = ""}
-
-    const postQuery = Post.find({
-          "author" : { $regex: req.query.author, $options: 'i'},
-          "title" : { $regex: req.query.title, $options: 'i'},
-          "university" : { $regex: req.query.university, $options: 'i'},
-          "course" : { $regex: req.query.course, $options: 'i'}
-    });
-    const counter = Post.find({
-      "author": { $regex: req.query.author, $options: 'i'},
-      "title" : { $regex: req.query.title, $options: 'i'},
-      "university" : { $regex: req.query.university, $options: 'i'},
-      "course" : { $regex: req.query.course, $options: 'i'},
-    }).countDocuments();
-
-    let fetchedPosts;
-    postQuery
-    .then( documents => {
-      fetchedPosts = documents;
-      return counter;
-    }).then( count => {
-      res.status(200).json({
-        message: "Posts fetched successfully!",
-        posts: fetchedPosts,
-        maxPosts: count
-      });
-    })
-    .catch(error => {
-      res.status(500).json({
-        message: "Fetching posts failed!"
-      });
-    });
   }
-
-
+  postQuery
+  .then( documents => {
+    fetchedPosts = documents;
+    return counter;
+  }).then( count => {
+    res.status(200).json({
+      message: "Posts fetched successfully!",
+      posts: fetchedPosts,
+      maxPosts: count
+    });
+  })
+  .catch(error => {
+    res.status(500).json({
+    message: "Fetching posts failed!"
+    });
+  });
 }
+
 
 exports.createPost =  (req, res, next) => {
   console.log(req.body);

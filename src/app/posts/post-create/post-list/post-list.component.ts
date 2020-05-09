@@ -46,12 +46,14 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.searchAuthor = undefined;
     this.searchCourse = undefined;
     this.searchUniversity = undefined;
+    this.searchMinimumPrice = undefined;
+    this.searchMaximumPrice = undefined;
   }
 
   ngOnInit() {
     this.isLoading = true;
     this.userId = this.authService.getUserId();
-    this.postsService.getPosts(this.postsPerPage, this.currentPage, this.userId, this.searchAuthor, this.searchTitle, this.searchUniversity, this.searchCourse);
+    this.postsService.getPosts(this.postsPerPage, this.currentPage, this.userId, this.searchAuthor, this.searchTitle, this.searchUniversity, this.searchCourse, this.searchMinimumPrice, this.searchMaximumPrice);
     this.postsSub = this.postsService.getPostUpdateListener()
     .subscribe(
       (postData: {posts: Post[], postCount: number}) =>  {
@@ -77,7 +79,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   onDelete(postId: string) {
     this.isLoading = true;
     this.postsService.deletePost(postId).subscribe( () => {
-      this.postsService.getPosts(this.postsPerPage, this.currentPage, this.userId, this.searchAuthor, this.searchTitle, this.searchUniversity, this.searchCourse);
+      this.postsService.getPosts(this.postsPerPage, this.currentPage, this.userId, this.searchAuthor, this.searchTitle, this.searchUniversity, this.searchCourse, this.searchMinimumPrice, this.searchMaximumPrice);
     });
   }
 
@@ -85,9 +87,7 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.currentPage = pageData.pageIndex + 1;
     this.postsPerPage = pageData.pageSize;
-    this.postsService.getPosts(this.postsPerPage, this.currentPage, this.userId, this.searchAuthor, this.searchTitle, this.searchUniversity, this.searchCourse);
+    this.postsService.getPosts(this.postsPerPage, this.currentPage, this.userId, this.searchAuthor, this.searchTitle, this.searchUniversity, this.searchCourse, this.searchMinimumPrice, this.searchMaximumPrice);
   }
 
-  onBid(amount: number) {
-  }
 }
