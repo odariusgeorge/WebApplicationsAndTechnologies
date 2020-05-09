@@ -14,4 +14,5 @@ export interface Post {
   minimumAllowedPrice: number;
   winner: string;
   date: Date;
+  bought: boolean;
 }

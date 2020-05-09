@@ -4,6 +4,9 @@ import { PostListSellingComponent } from '../post-create/post-list-selling/post-
 import { PostListBuyingComponent } from '../post-create/post-list-buying/post-list-buying.component';
 import { PostListExpiredComponent } from '../post-create/post-list-expired/post-list-expired.component';
 import { PostCreateComponent } from '../post-create/post-create/post-create.component';
+import { PostBuyComponent} from '../post-create/post-buy/post-buy.component';
+import { PostListWonComponent } from './post-list-won/post-list-won.component';
+import { PostListBoughtComponent } from './post-list-bought/post-list-bought.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { AngularMaterialModule } from 'src/app/angular-material.module';
 import { CommonModule } from '@angular/common';
@@ -16,7 +19,7 @@ import { PostMessagesComponent } from './post-messages/post-messages.component';
 import { PostBidComponent } from './post-bid/post-bid.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { PostListWonComponent } from './post-list-won/post-list-won.component';
+
 
 
 @NgModule({
@@ -28,7 +31,9 @@ import { PostListWonComponent } from './post-list-won/post-list-won.component';
     PostListExpiredComponent,
     PostListWonComponent,
     PostMessagesComponent,
+    PostBuyComponent,
     PostBidComponent,
+    PostListBoughtComponent,
     JsonFilterByPipe,
     FilterPipe,
     FilterPipeNumberLow,

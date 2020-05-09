@@ -18,6 +18,9 @@
         <a mat-button routerLink="/postListWon" routerLinkActive="mat-accent">My won bids</a>
       </li>
       <li *ngIf="userIsAuthenticated && !userIsAdmin">
+        <a mat-button routerLink="/postListBought" routerLinkActive="mat-accent">Bought Products</a>
+      </li>
+      <li *ngIf="userIsAuthenticated && !userIsAdmin">
         <a mat-button routerLink="/createPost" routerLinkActive="mat-accent">New post</a>
       </li>
       <li *ngIf="!userIsAuthenticated">

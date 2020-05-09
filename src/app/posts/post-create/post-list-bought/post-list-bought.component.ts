@@ -5,15 +5,12 @@ import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from '../../../auth/auth.service';
 
-declare let paypal: any;
-
 @Component({
-  selector: 'app-post-list',
-  templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.css']
+  templateUrl: './post-list-bought.component.html',
+  styleUrls: ['./post-list-bought.component.css']
 })
 
-export class PostListComponent implements OnInit, OnDestroy {
+export class PostListBoughtComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
 
   isLoading = false;
@@ -30,28 +27,18 @@ export class PostListComponent implements OnInit, OnDestroy {
   searchAuthor: string;
   searchUniversity: string;
   searchCourse: string;
-  searchMinimumPrice: number;
-  searchMaximumPrice: number;
   today = Date.now();
-  expired: boolean;
 
 
   constructor(public postsService: PostsService, private authService: AuthService) {
     setInterval(() => {this.today = Date.now()}, 1);
   }
 
-  update() {
-    this.ngOnInit();
-    this.searchTitle = undefined;
-    this.searchAuthor = undefined;
-    this.searchCourse = undefined;
-    this.searchUniversity = undefined;
-  }
 
   ngOnInit() {
     this.isLoading = true;
     this.userId = this.authService.getUserId();
-    this.postsService.getPosts(this.postsPerPage, this.currentPage, this.userId, this.searchAuthor, this.searchTitle, this.searchUniversity, this.searchCourse);
+    this.postsService.getPostsBought(this.postsPerPage, this.currentPage, this.userId);
     this.postsSub = this.postsService.getPostUpdateListener()
     .subscribe(
       (postData: {posts: Post[], postCount: number}) =>  {
@@ -74,20 +61,10 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.authStatusSub.unsubscribe();
   }
 
-  onDelete(postId: string) {
-    this.isLoading = true;
-    this.postsService.deletePost(postId).subscribe( () => {
-      this.postsService.getPosts(this.postsPerPage, this.currentPage, this.userId, this.searchAuthor, this.searchTitle, this.searchUniversity, this.searchCourse);
-    });
-  }
-
   onChangedPage(pageData: PageEvent) {
     this.isLoading = true
     this.currentPage = pageData.pageIndex + 1;
     this.postsPerPage = pageData.pageSize;
-    this.postsService.getPosts(this.postsPerPage, this.currentPage, this.userId, this.searchAuthor, this.searchTitle, this.searchUniversity, this.searchCourse);
-  }
-
-  onBid(amount: number) {
+    this.postsService.getPostsBought(this.postsPerPage, this.currentPage, this.userId);
   }
 }

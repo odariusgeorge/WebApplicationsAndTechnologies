@@ -17,8 +17,8 @@ export class PostsService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getPosts(postsPerPage: number, currentPage: number, userId: string) {
-    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+  getPosts(postsPerPage: number, currentPage: number, userId: string, author: string, title: string, university: string, course: string) {
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&creatorId=${userId}&author=${author}&title=${title}&university=${university}&course=${course}&date=${true}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
       BACKEND_URL+queryParams
@@ -37,14 +37,14 @@ export class PostsService {
             author: post.author,
             startingPrice: post.startingPrice,
             minimumAllowedPrice: post.minimumAllowedPrice,
-            date: new Date(post.date)
+            date: new Date(post.date),
+            bought: post.bought
           };
         }), maxPosts: postData.maxPosts};
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => new Date(post.date) > new Date(Date.now()) && post.creator != userId)
-        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
+        this.postsUpdated.next({posts: [...this.posts], postCount: transformedPosts.maxPosts});
       });
   }
 
@@ -68,7 +68,8 @@ export class PostsService {
             author: post.author,
             startingPrice: post.startingPrice,
             minimumAllowedPrice: post.minimumAllowedPrice,
-            date: new Date(post.date)
+            date: new Date(post.date),
+            bought: post.bought
           };
         }), maxPosts: postData.maxPosts};
       }))
@@ -100,7 +101,8 @@ export class PostsService {
             startingPrice: post.startingPrice,
             minimumAllowedPrice: post.minimumAllowedPrice,
             winner: post.winner,
-            date: new Date(post.date)
+            date: new Date(post.date),
+            bought: post.bought
           };
         }), maxPosts: postData.maxPosts};
       }))
@@ -132,13 +134,47 @@ export class PostsService {
             startingPrice: post.startingPrice,
             minimumAllowedPrice: post.minimumAllowedPrice,
             winner: post.winner,
-            date: new Date(post.date)
+            date: new Date(post.date),
+            bought: post.bought
           };
         }), maxPosts: postData.maxPosts};
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => post.winner == userId && new Date(post.date) < new Date(Date.now()) && post.startingPrice>=post.minimumAllowedPrice)
+        this.posts = this.posts.filter((post: Post) => post.winner == userId && new Date(post.date) < new Date(Date.now()) && post.startingPrice>=post.minimumAllowedPrice && post.bought == false)
+        this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
+      });
+  }
+
+  getPostsBought(postsPerPage: number, currentPage: number, userId: string) {
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    this.http
+    .get<{message: string, posts: any, maxPosts: number}>(
+      BACKEND_URL+queryParams
+      )
+      .pipe(map(postData => {
+        return {
+          posts: postData.posts.map( post => {
+          return {
+            title: post.title,
+            content: post.content,
+            id: post._id,
+            imagePath: post.imagePath,
+            creator: post.creator,
+            course: post.course,
+            university: post.university,
+            author: post.author,
+            startingPrice: post.startingPrice,
+            minimumAllowedPrice: post.minimumAllowedPrice,
+            winner: post.winner,
+            date: new Date(post.date),
+            bought: post.bought
+          };
+        }), maxPosts: postData.maxPosts};
+      }))
+      .subscribe( transformedPosts => {
+        this.posts = transformedPosts.posts;
+        this.posts = this.posts.filter((post: Post) => post.winner == userId && post.bought == true)
         this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
       });
   }
@@ -164,7 +200,8 @@ export class PostsService {
             startingPrice: post.startingPrice,
             minimumAllowedPrice: post.minimumAllowedPrice,
             winner: post.winner,
-            date: new Date(post.date)
+            date: new Date(post.date),
+            bought: post.bought
           };
         }), maxPosts: postData.maxPosts};
       }))
@@ -182,7 +219,7 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date }>(BACKEND_URL+ "/" + id);
+    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date, bought: boolean }>(BACKEND_URL+ "/" + id);
   }
 
   addPost(title: string, content: string, image: File, course: string, university: string, author: string, startingPrice: number, minimumAllowedPrice: number, date: Date) {
@@ -197,7 +234,7 @@ export class PostsService {
     postData.append("minimumAllowedPrice", JSON.stringify(minimumAllowedPrice));
     postData.append("winner", null);
     postData.append("date", new Date(date).toISOString());
-
+    postData.append("bought", JSON.stringify(false));
     this.http
     .post<{message: string, post: Post}>(BACKEND_URL,
     postData)
@@ -222,6 +259,7 @@ export class PostsService {
       postData.append("minimumAllowedPrice", JSON.stringify(minimumAllowedPrice));
       postData.append("winner", winner);
       postData.append("date", JSON.stringify(date));
+      postData.append("bought", JSON.stringify(false));
     } else {
         postData =  {
         id: id,
@@ -236,7 +274,8 @@ export class PostsService {
         startingPrice: startingPrice,
         minimumAllowedPrice: minimumAllowedPrice,
         winner: winner,
-        date: date
+        date: date,
+        bought: false
       }
     }
     this.http.put(BACKEND_URL + "/" + id, postData)
@@ -259,7 +298,8 @@ export class PostsService {
         startingPrice: startingPrice,
         minimumAllowedPrice: minimumAllowedPrice,
         winner: winner,
-        date: date
+        date: date,
+        bought: false
       }
     this.http.put(BACKEND_URL + "/" + id, postData)
     .subscribe(response => {
@@ -280,11 +320,35 @@ export class PostsService {
         startingPrice: startingPrice,
         minimumAllowedPrice: minimumAllowedPrice,
         winner: winner,
-        date: date
+        date: date,
+        bought: false
       }
     this.http.put(BACKEND_URL + "/" + id, postData)
     .subscribe(response => {
     })
+  }
+
+
+  buyProduct(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
+    let postData: Post = {
+      id: id,
+      title: titleUpdated,
+      content: contentUpdated,
+      imagePath: imageUpdated,
+      creator: null,
+      course: courseUpdated,
+      university: universityUpdated,
+      author: authorUpdated,
+      messages: messages,
+      startingPrice: startingPrice,
+      minimumAllowedPrice: minimumAllowedPrice,
+      winner: winner,
+      date: date,
+      bought: true
+    }
+  this.http.put(BACKEND_URL + "/" + id, postData)
+  .subscribe(response => {
+  })
   }
 
 

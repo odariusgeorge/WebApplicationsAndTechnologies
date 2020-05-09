@@ -14,7 +14,8 @@ const postSchema = mongoose.Schema({
   startingPrice: {type: Number, required: true},
   minimumAllowedPrice: {type: Number, required: true},
   winner: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
-  date: {type: Date, required: true}
+  date: {type: Date, required: true},
+  bought: {type: Boolean, required: true}
 });
 
 module.exports = mongoose.model('Post', postSchema);

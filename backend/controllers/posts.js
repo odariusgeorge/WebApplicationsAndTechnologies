@@ -3,32 +3,93 @@ const Post = require("../models/post")
 exports.getPosts = (req, res, next) => {
   const pageSize = +req.query.pageSize;
   const currentPage = +req.query.page;
-  const postQuery = Post.find();
-  let fetchedPosts;
-  // if (pageSize && currentPage) {
-  //   postQuery
-  //   .skip(pageSize * (currentPage-1))
-  //   .limit(pageSize);
-  // }
-  postQuery
-  .then( documents => {
-    fetchedPosts = documents;
-    return Post.countDocuments();
-  }).then( count => {
-    res.status(200).json({
-      message: "Posts fetched successfully!",
-      posts: fetchedPosts,
-      maxPosts: count
+
+  if(req.query.date == 'true') {
+    if(req.query.author=='undefined' || req.query.author == undefined) { req.query.author = ""}
+    if(req.query.title=='undefined' || req.query.title == undefined) { req.query.title = ""}
+    if(req.query.university=='undefined' || req.query.university == undefined) { req.query.university = ""}
+    if(req.query.course=='undefined' || req.query.course == undefined) { req.query.course = ""}
+
+    const postQuery = Post.find({
+          "author" : { $regex: req.query.author, $options: 'i'},
+          "title" : { $regex: req.query.title, $options: 'i'},
+          "university" : { $regex: req.query.university, $options: 'i'},
+          "course" : { $regex: req.query.course, $options: 'i'},
+          "date": { $gte: new Date(Date.now()) }
     });
-  })
-  .catch(error => {
-    res.status(500).json({
-      message: "Fetching posts failed!"
+    const counter = Post.find({
+      "author": { $regex: req.query.author, $options: 'i'},
+      "title" : { $regex: req.query.title, $options: 'i'},
+      "university" : { $regex: req.query.university, $options: 'i'},
+      "course" : { $regex: req.query.course, $options: 'i'},
+      "date": { $gte: new Date(Date.now()) }
+    }).countDocuments();
+
+    let fetchedPosts;
+    if (pageSize && currentPage) {
+      postQuery
+      .skip(pageSize * (currentPage-1))
+      .limit(pageSize);
+    }
+    postQuery
+    .then( documents => {
+      fetchedPosts = documents;
+      return counter;
+    }).then( count => {
+      res.status(200).json({
+        message: "Posts fetched successfully!",
+        posts: fetchedPosts,
+        maxPosts: count
+      });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching posts failed!"
+      });
     });
-  });
+  } else {
+    if(req.query.author=='undefined' || req.query.author == undefined) { req.query.author = ""}
+    if(req.query.title=='undefined' || req.query.title == undefined) { req.query.title = ""}
+    if(req.query.university=='undefined' || req.query.university == undefined) { req.query.university = ""}
+    if(req.query.course=='undefined' || req.query.course == undefined) { req.query.course = ""}
+
+    const postQuery = Post.find({
+          "author" : { $regex: req.query.author, $options: 'i'},
+          "title" : { $regex: req.query.title, $options: 'i'},
+          "university" : { $regex: req.query.university, $options: 'i'},
+          "course" : { $regex: req.query.course, $options: 'i'}
+    });
+    const counter = Post.find({
+      "author": { $regex: req.query.author, $options: 'i'},
+      "title" : { $regex: req.query.title, $options: 'i'},
+      "university" : { $regex: req.query.university, $options: 'i'},
+      "course" : { $regex: req.query.course, $options: 'i'},
+    }).countDocuments();
+
+    let fetchedPosts;
+    postQuery
+    .then( documents => {
+      fetchedPosts = documents;
+      return counter;
+    }).then( count => {
+      res.status(200).json({
+        message: "Posts fetched successfully!",
+        posts: fetchedPosts,
+        maxPosts: count
+      });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching posts failed!"
+      });
+    });
+  }
+
+
 }
 
 exports.createPost =  (req, res, next) => {
+  console.log(req.body);
   const url = req.protocol + '://' + req.get("host");
   const post = new Post({
     title: req.body.title,
@@ -42,7 +103,8 @@ exports.createPost =  (req, res, next) => {
     startingPrice: req.body.startingPrice,
     minimumAllowedPrice: req.body.minimumAllowedPrice,
     winner: null,
-    date: req.body.date
+    date: req.body.date,
+    bought: req.body.bought
   });
   post.save().then(createdPost => {
     res.status(201).json({
@@ -59,7 +121,8 @@ exports.createPost =  (req, res, next) => {
       startingPrice: createdPost.startingPrice,
       minimumAllowedPrice: createdPost.minimumAllowedPrice,
       winner: createdPost.winner,
-      date: createdPost.date
+      date: createdPost.date,
+      bought: createdPost.bought
     }
     });
   })
@@ -88,7 +151,8 @@ exports.updatePost = (req, res, next) => {
     startingPrice: req.body.startingPrice,
     minimumAllowedPrice: req.body.minimumAllowedPrice,
     winner: req.body.winner,
-    date: req.body.date
+    date: req.body.date,
+    bought: req.body.bought
   })
 
   Post.updateOne({_id: req.params.id},post).then( result => {

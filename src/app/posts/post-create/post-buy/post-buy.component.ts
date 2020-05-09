@@ -8,10 +8,10 @@ import { AuthService } from 'src/app/auth/auth.service';
 declare let paypal: any;
 
 @Component({
-  templateUrl: './post-bid.component.html',
-  styleUrls: ['./post-bid.component.css']
+  templateUrl: './post-buy.component.html',
+  styleUrls: ['./post-buy.component.css']
 })
-export class PostBidComponent implements OnInit, AfterViewChecked {
+export class PostBuyComponent implements OnInit, AfterViewChecked {
 
   constructor(public postsService: PostsService, public authService: AuthService, public route: ActivatedRoute) {}
   private postId: string;
@@ -42,7 +42,7 @@ export class PostBidComponent implements OnInit, AfterViewChecked {
       });
   },
   onClick: () => {
-    this.onPostBid();
+    this.onBuy();
   }
 }
 
@@ -65,10 +65,8 @@ addPaypalScript() {
   })
 }
 
+
   ngOnInit() {
-    this.form = new FormGroup({
-      amount: new FormControl(null)
-    });
     this.paypalLoad = true;
     this.addScript = false;
     this.currentUser = this.authService.getUserId();
@@ -100,14 +98,8 @@ addPaypalScript() {
     });
   }
 
-  onPostBid() {
-    if(this.form.invalid || this.form.value.amount <= this.finalAmount) {
-      alert("Ammount should be bigger than current price!");
-      return;
-    }
-    this.post.winner = this.authService.getUserId();
-    this.post.startingPrice = this.form.value.amount;
-    this.postsService.updateBid(
+  onBuy() {
+    this.postsService.buyProduct(
       this.post.id,
       this.post.title,
       this.post.content,
@@ -121,7 +113,5 @@ addPaypalScript() {
       this.post.winner,
       this.post.date
     );
-    this.finalAmount = this.post.startingPrice;
-    this.form.reset();
   }
 }

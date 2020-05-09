@@ -14,6 +14,8 @@ import { AuthGuard } from './auth/auth.guard';
 import { AdminGuard } from './auth/admin.guard';
 import { ModifyPasswordComponent } from './auth/modifyPassword/modifyPassword.component';
 import { PostListWonComponent } from './posts/post-create/post-list-won/post-list-won.component';
+import { PostBuyComponent } from './posts/post-create/post-buy/post-buy.component';
+import { PostListBoughtComponent } from './posts/post-create/post-list-bought/post-list-bought.component';
 
 
 
@@ -40,6 +42,9 @@ const routes: Routes = [
     path: 'postListExpired', component: PostListExpiredComponent, canActivate: [AdminGuard]
   },
   {
+    path: 'postListBought', component: PostListBoughtComponent, canActivate: [AuthGuard]
+  },
+  {
     path: 'edit/:postId', component: PostCreateComponent, canActivate: [AdminGuard]
   },
   {
@@ -59,6 +64,9 @@ const routes: Routes = [
   },
   {
     path: 'bid/:postId', component: PostBidComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'buy/:postId', component: PostBuyComponent, canActivate: [AuthGuard]
   }
 ];
 

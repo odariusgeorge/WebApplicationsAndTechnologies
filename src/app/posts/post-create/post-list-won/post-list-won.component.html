@@ -8,7 +8,7 @@
   <br>
   <mat-expansion-panel *ngFor="let post of posts | filter: searchAuthor : 'author' | filter: searchTitle : 'title' | filter: searchCourse: 'course' | filter: searchUniversity : 'university' ">
     <mat-expansion-panel-header>
-      <mat-panel-title *ngIf="post.date > today ">
+      <mat-panel-title *ngIf="post.date < today ">
         Title: {{post.title}}, Author: {{post.author}}, Expiry in: WON, Price: {{post.startingPrice}}$, You won this product!
       </mat-panel-title>
     </mat-expansion-panel-header>
@@ -20,6 +20,9 @@
     <div class = "post-image">
       <img [src]="post.imagePath"  [alt]="post.title">
     </div>
+    <mat-action-row *ngIf="userIsAuthenticated && !userIsAdmin">
+      <a mat-button color = "primary" [routerLink]="['/buy', post.id]" *ngIf="userId!= post.creator"> BUY </a>
+    </mat-action-row>
   </mat-panel-description>
   </mat-expansion-panel>
 </mat-accordion>

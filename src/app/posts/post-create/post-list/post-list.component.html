@@ -6,8 +6,9 @@
   <input type="text" [(ngModel)]="searchCourse" placeholder="Search Course" />
   <input type="number" [(ngModel)]="searchMinimumPrice" placeholder="Minimum Price" />
   <input type="number" [(ngModel)]="searchMaximumPrice" placeholder="Maximum Price" />
+  <button (click)= update() >Apply Filters</button>
   <br><br>
-  <mat-expansion-panel *ngFor="let post of posts | filter: searchAuthor : 'author' | filter: searchTitle : 'title' | filter: searchCourse: 'course' | filter: searchUniversity : 'university' | filterNumberLow: searchMinimumPrice : 'startingPrice' | filterNumberHigh: searchMaximumPrice : 'startingPrice' ">
+  <mat-expansion-panel *ngFor="let post of posts | filter: searchAuthor : 'author'">
     <mat-expansion-panel-header>
       <mat-panel-title *ngIf="post.date > today ">
         Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ post.date - today | date:'dd:hh:mm:ss'}}, Price: {{post.startingPrice}}$
@@ -36,6 +37,7 @@
   </mat-panel-description>
   </mat-expansion-panel>
 </mat-accordion>
-<!-- <mat-paginator *ngIf = "posts.length>0" [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOption" (page)="onChangedPage($event)" ></mat-paginator> -->
-<p class = "info-text mat-body-1" *ngIf="posts.length == 0 && !isLoading">No posts added yet!</p>
+<mat-paginator *ngIf = "posts.length>0" [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOption" (page)="onChangedPage($event)" ></mat-paginator>
+<p class = "info-text mat-body-1" *ngIf="posts.length == 0 && !isLoading">No books on sale yet/ No books with searched criterias!</p>
+<button class="host"  *ngIf="posts.length == 0 && !isLoading" (click)= update()>Reset Search</button>
 

@@ -11,7 +11,10 @@
       <mat-panel-title *ngIf="post.date > today ">
         Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ post.date - today | date:'dd:hh:mm:ss'}}, Price: {{post.startingPrice}}$
       </mat-panel-title>
-      <mat-panel-title *ngIf="post.date < today && post.startingPrice >= post.minimumAllowedPrice">
+      <mat-panel-title *ngIf="post.date < today && post.startingPrice >= post.minimumAllowedPrice && post.bought == false">
+        Title: {{post.title}}, Author: {{post.author}}, Expiry in: WAITING FOR WINNER TO BUY, Price: {{post.startingPrice}}$
+      </mat-panel-title>
+      <mat-panel-title *ngIf="post.date < today && post.startingPrice >= post.minimumAllowedPrice && post.bought == true">
         Title: {{post.title}}, Author: {{post.author}}, Expiry in: SOLD, Price: {{post.startingPrice}}$
       </mat-panel-title>
       <mat-panel-title *ngIf="post.date < today && post.startingPrice < post.minimumAllowedPrice">
