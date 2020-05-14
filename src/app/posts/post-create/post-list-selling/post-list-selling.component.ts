@@ -4,6 +4,9 @@ import { PostsService } from '../post.service';
 import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from '../../../auth/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from "../../../../environments/environment";
+import * as io from 'socket.io-client';
 
 @Component({
   templateUrl: './post-list-selling.component.html',
@@ -11,6 +14,7 @@ import { AuthService } from '../../../auth/auth.service';
 })
 
 export class PostListSellingComponent implements OnInit, OnDestroy {
+  socket;
   posts: Post[] = [];
 
   isLoading = false;
@@ -30,8 +34,9 @@ export class PostListSellingComponent implements OnInit, OnDestroy {
   today = Date.now();
 
 
-  constructor(public postsService: PostsService, private authService: AuthService) {
+  constructor(public postsService: PostsService, private authService: AuthService, private http: HttpClient) {
     setInterval(() => {this.today = Date.now()}, 1);
+    this.socket = io(environment.api);
   }
 
 
@@ -54,6 +59,11 @@ export class PostListSellingComponent implements OnInit, OnDestroy {
       this.userIsAuthenticated = isAuthenticated;
       this.userId = this.authService.getUserId();
     });
+
+    this.socket.on('postUpdated', () => {
+      this.ngOnInit();
+    })
+
   }
 
   ngOnDestroy() {

@@ -3,7 +3,7 @@ const Post = require("../models/post")
 exports.getPosts = (req, res, next) => {
   const pageSize = +req.query.pageSize;
   const currentPage = +req.query.page;
-
+  const io = req.app.get('io');
   let query = {};
 
   if(!(req.query.author=='undefined' || req.query.author == undefined)) { query.author = {$regex: req.query.author, $options: 'i' }}
@@ -40,6 +40,7 @@ exports.getPosts = (req, res, next) => {
       posts: fetchedPosts,
       maxPosts: count
     });
+    io.emit('listUpdated');
   })
   .catch(error => {
     res.status(500).json({
@@ -50,7 +51,7 @@ exports.getPosts = (req, res, next) => {
 
 
 exports.createPost =  (req, res, next) => {
-  console.log(req.body);
+  const io = req.app.get('io');
   const url = req.protocol + '://' + req.get("host");
   const post = new Post({
     title: req.body.title,
@@ -88,6 +89,7 @@ exports.createPost =  (req, res, next) => {
       bidders: createdPost.bidders
     }
     });
+    io.emit('newPostAdded');
   })
   .catch(error => {
     res.status(500).json({
@@ -97,6 +99,7 @@ exports.createPost =  (req, res, next) => {
 };
 
 exports.updatePost = (req, res, next) => {
+  const io = req.app.get('io');
   let imagePath = req.body.imagePath;
   if(req.file) {
     const url = req.protocol + '://' + req.get("host");
@@ -128,6 +131,7 @@ exports.updatePost = (req, res, next) => {
       }
 
   });
+  io.emit('postUpdated');
   };
 
   exports.deletePost = (req, res, next) => {
