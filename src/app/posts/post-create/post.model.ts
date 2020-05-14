@@ -15,4 +15,5 @@ export interface Post {
   winner: string;
   date: Date;
   bought: boolean;
+  bidders: Array<string>;
 }

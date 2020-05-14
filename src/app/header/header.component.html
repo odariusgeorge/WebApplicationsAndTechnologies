@@ -8,6 +8,9 @@
       <li *ngIf="userIsAdmin">
         <a mat-button routerLink="/postListExpired" routerLinkActive="mat-accent">Expired Post</a>
       </li>
+      <li *ngIf="userIsAdmin">
+        <a mat-button routerLink="/postListSold" routerLinkActive="mat-accent">Sold Post</a>
+      </li>
       <li *ngIf="userIsAuthenticated && !userIsAdmin">
         <a mat-button routerLink="/postListSelling" routerLinkActive="mat-accent">My posts</a>
       </li>

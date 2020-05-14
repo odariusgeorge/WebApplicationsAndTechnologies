@@ -65,7 +65,8 @@ export class PostMessagesComponent implements OnInit {
             minimumAllowedPrice: postData.minimumAllowedPrice,
             winner: postData.winner,
             date: postData.date,
-            bought: postData.bought
+            bought: postData.bought,
+            bidders: postData.bidders
           };
         });
       }
@@ -95,7 +96,8 @@ export class PostMessagesComponent implements OnInit {
       this.post.startingPrice,
       this.post.minimumAllowedPrice,
       this.post.winner,
-      this.post.date
+      this.post.date,
+      this.post.bidders
     );
     this.form.reset();
   }
@@ -122,7 +124,8 @@ export class PostMessagesComponent implements OnInit {
       this.post.startingPrice,
       this.post.minimumAllowedPrice,
       this.post.winner,
-      this.post.date
+      this.post.date,
+      this.post.bidders
     );
     this.form.reset();
   }

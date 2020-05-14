@@ -54,7 +54,8 @@ export class PostCreateComponent implements OnInit {
             minimumAllowedPrice: postData.minimumAllowedPrice,
             winner: postData.winner,
             date: postData.date,
-            bought: postData.bought
+            bought: postData.bought,
+            bidders: postData.bidders
           };
           this.form.setValue({
             title: this.post.title,
@@ -117,7 +118,8 @@ export class PostCreateComponent implements OnInit {
         this.post.startingPrice,
         this.post.minimumAllowedPrice,
         this.post.winner,
-        this.post.date
+        this.post.date,
+        this.post.bidders
         );
     }
     this.form.reset();

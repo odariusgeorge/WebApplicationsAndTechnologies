@@ -7,6 +7,7 @@ import { PostCreateComponent } from '../post-create/post-create/post-create.comp
 import { PostBuyComponent} from '../post-create/post-buy/post-buy.component';
 import { PostListWonComponent } from './post-list-won/post-list-won.component';
 import { PostListBoughtComponent } from './post-list-bought/post-list-bought.component';
+import { PostListSoldComponent } from './post-list-sold/post-list-sold.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { AngularMaterialModule } from 'src/app/angular-material.module';
 import { CommonModule } from '@angular/common';
@@ -34,6 +35,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     PostBuyComponent,
     PostBidComponent,
     PostListBoughtComponent,
+    PostListSoldComponent,
     JsonFilterByPipe,
     FilterPipe,
     FilterPipeNumberLow,

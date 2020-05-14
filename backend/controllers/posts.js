@@ -16,14 +16,14 @@ exports.getPosts = (req, res, next) => {
   if(!(req.query.creatorId =='null' || req.query.creatorId == 'undefined' || req.query.creatorId == undefined)) { query.creator = {$ne: req.query.creatorId}}
   if(req.query.date == 'true') { query.date = { $gte: new Date(Date.now())}} else if(req.query.date == 'false') { query.date = { $lt: new Date(Date.now())} }
   if(!(req.query.owner == undefined ||req.query.owner == 'undefined')) { query.creator = {$eq: req.query.owner}}
-  if(!(req.query.bidder == undefined || req.query.bidder == 'undefined')) { query.winner = {$eq: req.query.bidder}}
+  if(!(req.query.bidder == undefined || req.query.bidder == 'undefined')) { query.bidders = {$eq: req.query.bidder}}
   if(!(req.query.winner == undefined || req.query.winner == 'undefined')) { query.winner = {$eq: req.query.winner}}
   if(!(req.query.boughter == undefined || req.query.boughter == 'undefined')) { query.winner = {$eq: req.query.boughter}}
   if(req.query.bought == 'true') { query.bought = {$eq: req.query.bought}}
+  if(req.query.sold == 'true') { query.bought = {$eq: req.query.sold}}
 
   const postQuery = Post.find(query);
   const counter = Post.find(query).countDocuments();
-
   let fetchedPosts;
   if (pageSize && currentPage) {
       postQuery
@@ -65,7 +65,8 @@ exports.createPost =  (req, res, next) => {
     minimumAllowedPrice: req.body.minimumAllowedPrice,
     winner: null,
     date: req.body.date,
-    bought: req.body.bought
+    bought: req.body.bought,
+    bidders: req.body.bidders
   });
   post.save().then(createdPost => {
     res.status(201).json({
@@ -83,7 +84,8 @@ exports.createPost =  (req, res, next) => {
       minimumAllowedPrice: createdPost.minimumAllowedPrice,
       winner: createdPost.winner,
       date: createdPost.date,
-      bought: createdPost.bought
+      bought: createdPost.bought,
+      bidders: createdPost.bidders
     }
     });
   })
@@ -100,6 +102,7 @@ exports.updatePost = (req, res, next) => {
     const url = req.protocol + '://' + req.get("host");
     imagePath = url + "/images/" + req.file.filename
   }
+  console.log(req.body);
   const post = new Post({
     _id: req.body.id,
     title: req.body.title,
@@ -113,7 +116,8 @@ exports.updatePost = (req, res, next) => {
     minimumAllowedPrice: req.body.minimumAllowedPrice,
     winner: req.body.winner,
     date: req.body.date,
-    bought: req.body.bought
+    bought: req.body.bought,
+    bidders: req.body.bidders
   })
 
   Post.updateOne({_id: req.params.id},post).then( result => {

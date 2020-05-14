@@ -210,13 +210,44 @@ export class PostsService {
   }
 
 
+  getPostsSold(postsPerPage: number, currentPage: number) {
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&sold=${true}`;
+    this.http
+    .get<{message: string, posts: any, maxPosts: number}>(
+      BACKEND_URL+queryParams
+      )
+      .pipe(map(postData => {
+        return {
+          posts: postData.posts.map( post => {
+          return {
+            title: post.title,
+            content: post.content,
+            id: post._id,
+            imagePath: post.imagePath,
+            creator: post.creator,
+            course: post.course,
+            university: post.university,
+            author: post.author,
+            startingPrice: post.startingPrice,
+            minimumAllowedPrice: post.minimumAllowedPrice,
+            winner: post.winner,
+            date: new Date(post.date),
+            bought: post.bought
+          };
+        }), maxPosts: postData.maxPosts};
+      }))
+      .subscribe( transformedPosts => {
+        this.posts = transformedPosts.posts;
+        this.postsUpdated.next({posts: [...this.posts], postCount: transformedPosts.maxPosts});
+      });
+  }
 
   getPostUpdateListener() {
     return this.postsUpdated.asObservable();
   }
 
   getPost(id: string) {
-    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date, bought: boolean }>(BACKEND_URL+ "/" + id);
+    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string, course: string, university: string, author: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date, bought: boolean, bidders: Array<string> }>(BACKEND_URL+ "/" + id);
   }
 
   addPost(title: string, content: string, image: File, course: string, university: string, author: string, startingPrice: number, minimumAllowedPrice: number, date: Date) {
@@ -240,7 +271,7 @@ export class PostsService {
     });
   }
 
-  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
+  updatePost(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: File | string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date, bidders: Array<string>) {
     let postData: Post | FormData;
     if (typeof(imageUpdated) === 'object') {
       postData = new FormData();
@@ -272,7 +303,8 @@ export class PostsService {
         minimumAllowedPrice: minimumAllowedPrice,
         winner: winner,
         date: date,
-        bought: false
+        bought: false,
+        bidders: bidders
       }
     }
     this.http.put(BACKEND_URL + "/" + id, postData)
@@ -281,7 +313,7 @@ export class PostsService {
     })
   }
 
-  updatePostMessage(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
+  updatePostMessage(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date, bidders: Array<string>) {
     let postData: Post = {
         id: id,
         title: titleUpdated,
@@ -296,14 +328,15 @@ export class PostsService {
         minimumAllowedPrice: minimumAllowedPrice,
         winner: winner,
         date: date,
-        bought: false
+        bought: false,
+        bidders: bidders
       }
     this.http.put(BACKEND_URL + "/" + id, postData)
     .subscribe(response => {
     })
   }
 
-  updateBid(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
+  updateBid(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date, bidders: Array<string>) {
     let postData: Post = {
         id: id,
         title: titleUpdated,
@@ -318,7 +351,8 @@ export class PostsService {
         minimumAllowedPrice: minimumAllowedPrice,
         winner: winner,
         date: date,
-        bought: false
+        bought: false,
+        bidders: bidders
       }
     this.http.put(BACKEND_URL + "/" + id, postData)
     .subscribe(response => {
@@ -326,7 +360,7 @@ export class PostsService {
   }
 
 
-  buyProduct(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date) {
+  buyProduct(id: string, titleUpdated: string, contentUpdated: string, imageUpdated: string, courseUpdated: string, universityUpdated: string, authorUpdated: string, messages: Array<Array<Message>>, startingPrice: number, minimumAllowedPrice: number, winner: string, date: Date, bidders: Array<string>) {
     let postData: Post = {
       id: id,
       title: titleUpdated,
@@ -341,7 +375,8 @@ export class PostsService {
       minimumAllowedPrice: minimumAllowedPrice,
       winner: winner,
       date: date,
-      bought: true
+      bought: true,
+      bidders: bidders
     }
   this.http.put(BACKEND_URL + "/" + id, postData)
   .subscribe(response => {

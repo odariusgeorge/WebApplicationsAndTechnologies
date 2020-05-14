@@ -39,7 +39,7 @@ exports.createModerator =  (req, res, next) => {
   user.save()
   .then(result => {
     res.status(201).json({
-      message: 'User created!',
+      message: 'Moderator created!',
       result: result
     });
   })

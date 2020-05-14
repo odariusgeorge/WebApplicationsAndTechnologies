@@ -90,7 +90,8 @@ addPaypalScript() {
             minimumAllowedPrice: postData.minimumAllowedPrice,
             winner: postData.winner,
             date: postData.date,
-            bought: postData.bought
+            bought: postData.bought,
+            bidders: postData.bidders
           };
           this.finalAmount = postData.startingPrice;
         });
@@ -111,7 +112,8 @@ addPaypalScript() {
       this.post.startingPrice,
       this.post.minimumAllowedPrice,
       this.post.winner,
-      this.post.date
+      this.post.date,
+      this.post.bidders
     );
   }
 }

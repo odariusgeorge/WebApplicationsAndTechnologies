@@ -16,6 +16,7 @@ import { ModifyPasswordComponent } from './auth/modifyPassword/modifyPassword.co
 import { PostListWonComponent } from './posts/post-create/post-list-won/post-list-won.component';
 import { PostBuyComponent } from './posts/post-create/post-buy/post-buy.component';
 import { PostListBoughtComponent } from './posts/post-create/post-list-bought/post-list-bought.component';
+import { PostListSoldComponent } from './posts/post-create/post-list-sold/post-list-sold.component'
 
 
 
@@ -40,6 +41,9 @@ const routes: Routes = [
   },
   {
     path: 'postListExpired', component: PostListExpiredComponent, canActivate: [AdminGuard]
+  },
+  {
+    path: 'postListSold', component: PostListSoldComponent, canActivate: [AdminGuard]
   },
   {
     path: 'postListBought', component: PostListBoughtComponent, canActivate: [AuthGuard]
