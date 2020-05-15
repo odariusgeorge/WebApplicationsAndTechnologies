@@ -3,6 +3,30 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/user")
 
+exports.getUsers = (req, res, next) => {
+
+  const usersQuery = User.find();
+  const counter = User.find().countDocuments();
+  let fetchedUsers;
+
+  usersQuery
+  .then(users => {
+    fetchedUsers = users;
+    return counter;
+  }).then( count => {
+    res.status(200).json({
+      message: "Users fetched successfully!",
+      users: fetchedUsers,
+      maxUsers: count
+    });
+  })
+  .catch(error => {
+    res.status(500).json({
+      message: "Fetching users failed!"
+    });
+  });
+}
+
 exports.createUser =  (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
   .then(hash => {
@@ -71,6 +95,18 @@ exports.modifyPassword = (req, res, next) => {
 
   });
 }
+
+exports.deleteUser = (req, res, next) => {
+  User.deleteOne({email: req.params.id}).then( result => {
+    if(result.n > 0) {
+      res.status(200).json({message: 'Deletion successful!'});
+    } else {
+      res.status(401).json({message: 'Not authorized!'});
+    }
+  });
+};
+
+
 exports.userLogin =  (req, res, next) => {
   let fetchedUser;
   User.findOne({ email: req.body.email })
@@ -82,7 +118,7 @@ exports.userLogin =  (req, res, next) => {
     if (!result) {
       return res.status(404).json({ message: "Auth failed"});
     }
-    const token = jwt.sign({ email: fetchedUser.email, userId: fetchedUser._id}, process.env.JWT_KEY, {
+    const token = jwt.sign({ email: fetchedUser.email, userId: fetchedUser._id, isAdmin: fetchedUser.admin}, process.env.JWT_KEY, {
       expiresIn: "1h"
     });
     res.status(200).json({

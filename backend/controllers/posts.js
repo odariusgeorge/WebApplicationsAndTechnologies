@@ -105,7 +105,6 @@ exports.updatePost = (req, res, next) => {
     const url = req.protocol + '://' + req.get("host");
     imagePath = url + "/images/" + req.file.filename
   }
-  console.log(req.body);
   const post = new Post({
     _id: req.body.id,
     title: req.body.title,

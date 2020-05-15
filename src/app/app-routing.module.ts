@@ -17,6 +17,7 @@ import { PostListWonComponent } from './posts/post-create/post-list-won/post-lis
 import { PostBuyComponent } from './posts/post-create/post-buy/post-buy.component';
 import { PostListBoughtComponent } from './posts/post-create/post-list-bought/post-list-bought.component';
 import { PostListSoldComponent } from './posts/post-create/post-list-sold/post-list-sold.component'
+import { UserListComponent} from './auth/userList/user-list.component';
 
 
 
@@ -26,6 +27,9 @@ const routes: Routes = [
   },
   {
     path: 'postList', component: PostListComponent
+  },
+  {
+    path: 'userList', component: UserListComponent, canActivate: [AdminGuard]
   },
   {
     path: 'postListSelling', component: PostListSellingComponent, canActivate: [AuthGuard]

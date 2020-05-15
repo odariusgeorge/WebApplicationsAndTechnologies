@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
-
 import { AuthData } from "./auth-data.model";
 
 import { environment } from "../../environments/environment";
@@ -12,6 +11,8 @@ const BACKEND_URL = environment.apiUrl + "/user";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
+  private users: AuthData[] = [];
+  private usersUpdated = new Subject<{users: AuthData[], usersCount: number}>();
   private isAuthenticated = false;
   private token: string;
   private tokenTimer: any;
@@ -40,6 +41,20 @@ export class AuthService {
 
   getIsVerified() {
     return this.isVerified;
+  }
+
+  getAllUsers() {
+    this.http
+    .get<{message: string, users: any, maxUsers: number}>(
+      BACKEND_URL)
+    .subscribe( response => {
+      this.users = response.users;
+      this.usersUpdated.next({users: [...this.users], usersCount: response.maxUsers})
+    })
+  }
+
+  getUsersUpdateListener() {
+    return this.usersUpdated.asObservable();
   }
 
   createUser(email: string, password: string) {
@@ -186,4 +201,9 @@ export class AuthService {
   getUserId() {
     return this.userId;
   }
+
+  deleteUser(postId: string) {
+    return this.http.delete(BACKEND_URL + "/" + postId)
+  }
+
 }

@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { CreateModeratorComponent } from './createModerator/createModerator.component';
 import { ModifyPasswordComponent } from './modifyPassword/modifyPassword.component';
+import { UserListComponent } from './userList/user-list.component';
 import { FormsModule } from '@angular/forms'
 
 @NgModule({
@@ -13,7 +14,8 @@ import { FormsModule } from '@angular/forms'
     LoginComponent,
     SignupComponent,
     CreateModeratorComponent,
-    ModifyPasswordComponent
+    ModifyPasswordComponent,
+    UserListComponent
   ],
   imports: [
     CommonModule,

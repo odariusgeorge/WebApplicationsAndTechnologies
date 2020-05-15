@@ -60,8 +60,9 @@ export class PostListSellingComponent implements OnInit, OnDestroy {
       this.userId = this.authService.getUserId();
     });
 
-    this.socket.on('postUpdated', () => {
+    this.socket.once('postUpdated', () => {
       this.ngOnInit();
+      window.alert("someone bid/bought one of your post!")
     })
 
   }

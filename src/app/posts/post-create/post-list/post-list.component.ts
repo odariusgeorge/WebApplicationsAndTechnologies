@@ -5,8 +5,6 @@ import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from '../../../auth/auth.service';
 
-declare let paypal: any;
-
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
