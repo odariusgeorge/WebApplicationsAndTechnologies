@@ -125,12 +125,12 @@ exports.updatePost = (req, res, next) => {
   Post.updateOne({_id: req.params.id},post).then( result => {
       if(result.n > 0) {
         res.status(200).json({message: 'Update successful!'});
+        io.emit('postUpdated', post.title, post._id, post.bought);
       } else {
         res.status(401).json({message:"Wrong"});
       }
 
   });
-  io.emit('postUpdated');
   };
 
   exports.deletePost = (req, res, next) => {

@@ -1,9 +1,11 @@
 import {Component, OnInit, AfterViewChecked} from '@angular/core';
 import { Post } from '../post.model';
 import { PostsService } from '../post.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
+import { environment } from "../../../../environments/environment";
+import * as io from 'socket.io-client';
 
 declare let paypal: any;
 
@@ -13,7 +15,11 @@ declare let paypal: any;
 })
 export class PostBuyComponent implements OnInit, AfterViewChecked {
 
-  constructor(public postsService: PostsService, public authService: AuthService, public route: ActivatedRoute) {}
+  constructor(public postsService: PostsService, public authService: AuthService, public route: ActivatedRoute, public router: Router) {
+    this.socket = io(environment.api);
+  }
+
+  socket;
   private postId: string;
   public post: Post;
   public isLoading = false;
@@ -97,6 +103,14 @@ addPaypalScript() {
         });
       }
     });
+
+    this.socket.once('postUpdated', (title, id, bought) => {
+      if(this.post.id === id && bought == true) {
+          window.alert(`You have bought the book: ${title}.`);
+          this.router.navigate(['postListBought'], {skipLocationChange: true});
+        }
+    })
+
   }
 
   onBuy() {
@@ -116,4 +130,5 @@ addPaypalScript() {
       this.post.bidders
     );
   }
+
 }
