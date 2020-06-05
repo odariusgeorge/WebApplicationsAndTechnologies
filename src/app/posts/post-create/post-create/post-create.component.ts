@@ -20,8 +20,12 @@ export class PostCreateComponent implements OnInit {
   public isLoading = false;
   form: FormGroup;
   imagePreview: string;
+  myDate = new Date();
+  nextDay = new Date(this.myDate);
+
 
   ngOnInit() {
+    this.nextDay.setDate(this.myDate.getDate()+1);
     this.form = new FormGroup({
       title: new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
       author: new FormControl(null, {validators: [Validators.required]}),

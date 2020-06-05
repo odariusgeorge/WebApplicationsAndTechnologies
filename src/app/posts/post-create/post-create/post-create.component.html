@@ -57,7 +57,7 @@
       <br>
       <mat-form-field>
         <mat-label>Expiration Date</mat-label>
-        <input matInput [matDatepicker]="picker1" formControlName="date">
+        <input matInput [min]="nextDay" [matDatepicker]="picker1" formControlName="date">
         <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
         <mat-datepicker #picker1></mat-datepicker>
         <mat-datepicker #picker></mat-datepicker>

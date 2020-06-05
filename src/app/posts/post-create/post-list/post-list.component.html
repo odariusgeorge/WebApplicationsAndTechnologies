@@ -9,16 +9,13 @@
   <input type="number" [(ngModel)]="searchMaximumPrice" placeholder="Maximum Price" />
   <button (click)= update() >Apply Filters</button>
   <br><br>
-  <mat-expansion-panel *ngFor="let post of posts | filter: searchCourse : 'course'">
+  <mat-expansion-panel *ngFor="let post of posts | filter: '' : 'course'">
     <mat-expansion-panel-header>
-      <mat-panel-title *ngIf="post.date > today ">
-        Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ post.date - today | date:'dd:hh:mm:ss'}}, Price: {{post.startingPrice}}$
-      </mat-panel-title>
-      <mat-panel-title *ngIf="post.date < today ">
-        Title: {{post.title}}, Author: {{post.author}}, Expiry in: EXPIRED, Price: {{post.startingPrice}}$
+      <mat-panel-title>
+        Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ (post.date - today) | date:'dd:hh:mm:ss'}}, Price: {{post.startingPrice}}$
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <mat-panel-description *ngIf="post.date > today">
+    <mat-panel-description>
     <p> Author: {{post.author}} </p>
     <p> University: {{post.university}} </p>
     <p> Course: {{post.course}} </p>

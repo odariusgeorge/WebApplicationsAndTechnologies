@@ -28,22 +28,7 @@ export class PostMessagesComponent implements OnInit {
     this.userId = this.authService.getUserId();
     this.form = new FormGroup({
       message: new FormControl(null, {validators: [Validators.required]}),
-      replies: new FormArray([new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null),
-                              new FormControl(null)])
+      replies: new FormArray([new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null), new FormControl(null)])
     });
     this.route.paramMap.subscribe( (paramMap: ParamMap) => {
       if(paramMap.has('postId')) {
@@ -81,7 +66,7 @@ export class PostMessagesComponent implements OnInit {
     this.addedReply = {
       content: this.form.value.replies[index],
       creator: this.userId,
-      public: true
+      public: this.post.messages[index][0].public
     }
     this.post.messages[index].push(this.addedReply);
     this.postsService.updatePostMessage(
