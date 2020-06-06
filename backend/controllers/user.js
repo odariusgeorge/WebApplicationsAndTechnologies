@@ -5,8 +5,11 @@ const User = require("../models/user")
 
 exports.getUsers = (req, res, next) => {
 
-  const usersQuery = User.find();
-  const counter = User.find().countDocuments();
+  let query = {};
+  query.admin = {$eq: 'false'}
+
+  const usersQuery = User.find(query);
+  const counter = User.find(query).countDocuments();
   let fetchedUsers;
 
   usersQuery
