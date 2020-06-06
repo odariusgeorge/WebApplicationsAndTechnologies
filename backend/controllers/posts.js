@@ -19,7 +19,7 @@ exports.getPosts = (req, res, next) => {
   if(!(req.query.bidder == undefined || req.query.bidder == 'undefined')) { query.bidders = {$eq: req.query.bidder}}
   if(!(req.query.winner == undefined || req.query.winner == 'undefined')) { query.winner = {$eq: req.query.winner}}
   if(!(req.query.boughter == undefined || req.query.boughter == 'undefined')) { query.winner = {$eq: req.query.boughter}}
-  if(req.query.bought == 'true') { query.bought = {$eq: req.query.bought}}
+  if(req.query.bought == 'true' || req.query.bought == 'false') { query.bought = {$eq: req.query.bought}}
   if(req.query.sold == 'true') { query.bought = {$eq: req.query.sold}}
 
   const postQuery = Post.find(query);

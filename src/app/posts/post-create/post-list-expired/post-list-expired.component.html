@@ -13,7 +13,7 @@
         Title: {{post.title}}, Author: {{post.author}}, Expiry in: {{ post.date - today | date:'dd:hh:mm:ss'}}, Price: {{post.startingPrice}}$
       </mat-panel-title>
       <mat-panel-title *ngIf="post.date < today ">
-        Title: {{post.title}}, Author: {{post.author}}, Expiry in: EXPIRED, Price: {{post.startingPrice}}$
+        Title: {{post.title}}, Author: {{post.author}}, Expiry in: EXPIRED, Price: {{post.startingPrice}}$, Minimum Allowed Price: {{post.minimumAllowedPrice}}$
       </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-panel-description>

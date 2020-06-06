@@ -112,7 +112,7 @@ export class PostsService {
   }
 
   getPostsWon(postsPerPage: number, currentPage: number, userId: string) {
-    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&winner=${userId}&date=${false}`;
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&winner=${userId}&date=${false}&bought=${false}&priceOK=${true}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
       BACKEND_URL+queryParams
@@ -139,7 +139,7 @@ export class PostsService {
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => post.startingPrice>=post.minimumAllowedPrice && post.bought == false)
+        this.posts = this.posts.filter((post: Post) => post.startingPrice>=post.minimumAllowedPrice)
         this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
       });
   }
@@ -177,7 +177,7 @@ export class PostsService {
   }
 
   getPostsExpired(postsPerPage: number, currentPage: number) {
-    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}&date=${false}`;
     this.http
     .get<{message: string, posts: any, maxPosts: number}>(
       BACKEND_URL+queryParams
@@ -204,7 +204,7 @@ export class PostsService {
       }))
       .subscribe( transformedPosts => {
         this.posts = transformedPosts.posts;
-        this.posts = this.posts.filter((post: Post) => new Date(post.date) < new Date(Date.now()) && post.minimumAllowedPrice > post.startingPrice)
+        this.posts = this.posts.filter((post: Post) => post.minimumAllowedPrice > post.startingPrice)
         this.postsUpdated.next({posts: [...this.posts], postCount: this.posts.length});
       });
   }

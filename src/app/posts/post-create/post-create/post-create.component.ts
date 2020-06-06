@@ -73,6 +73,9 @@ export class PostCreateComponent implements OnInit {
             date: this.post.date
           });
         });
+        this.form.controls.startingPrice.disable();
+        this.form.controls.minimumAllowedPrice.disable();
+        this.form.controls.date.disable();
       } else {
         this.mode = 'create';
         this.postId = null;
